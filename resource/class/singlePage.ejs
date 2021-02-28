@@ -1,0 +1,613 @@
+<%-contentFor('body')%>
+    <%-include('.. /includes/multiSelectStyle.ejs')%>
+        <link href="/css/persian-datepicker.css" rel="stylesheet">
+
+
+        <div class="container">
+            <%-include('.. /includes/error.ejs', {errors})%>
+                <%-include('.. /includes/success.ejs', {success})%>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-11 d-flex justify-content-center">
+                            <%if(_class.image){%>
+                                <img src="<%=_class.image%>" width="900" height="700" style="border-radius: 1em;">
+                                <%}else{%>
+                                    <!-- <img src="/images/icons/imagePlaceholder.png" width="500">  -->
+
+                                    <p>تصویری برای کلاس ثبت نشده است</p>
+                                    <%}%>
+
+                        </div>
+                        <%if(user.type=='teacher' || user.isAdmin==true){%>
+                            <div class="col-1">
+
+
+                                <a href="/panel/class/edit/<%=_class._id%>">
+                                    <i class="material-icons" style="font-size: 5em;">settings</i>
+                                </a>
+
+                                کدکلاس<p>
+                                    <%=_class.code%>
+                                </p>
+                            </div>
+                            <%}%>
+                    </div>
+
+                    <div class="card card-nav-tabs card-plain mt-5">
+                        <div class="card-header card-header-danger">
+                            <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                            <div class="nav-tabs-navigation">
+                                <div class="nav-tabs-wrapper">
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#home" data-toggle="tab">
+                                                <i class="material-icons">
+                                                    home
+                                                </i>
+                                                صفجه اصلی
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#chat" data-toggle="tab">
+                                                <i class="material-icons">
+                                                    chat
+                                                </i>
+                                                تالار گفت و گو
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#online" data-toggle="tab">
+                                                <i class="material-icons">
+                                                    online_prediction
+                                                </i>
+                                                کلاس آنلاین
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#notification" data-toggle="tab">
+                                                <i class="material-icons">
+                                                    notifications
+                                                </i>
+                                                اطلاعیه ها
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#exercise" data-toggle="tab">
+                                                <i class="material-icons">
+                                                    border_color
+                                                </i>
+                                                تمرینات
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#exam" data-toggle="tab">
+                                                <i class="material-icons">content_paste</i>
+                                                آزمون
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="home">
+                                    <div class="col-3">
+                                        <div class="card">
+                                            <div class="card-header card-header-primary" style="text-align: center;">
+                                                <h4 class="card-title">دانش آموزان</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <%students.forEach(student=> {%>
+                                                    <div class="media">
+                                                        <img src="<%=student.profile%>" class="align-self-center mr-3"
+                                                            style="width:4em">
+                                                        <div class="media-body" style="text-align: right;">
+                                                            <h6
+                                                                class="<%-student._id.toString() == user._id.toString() ? 'text-success' : ''%>">
+                                                                <%=student.name%>
+                                                                    <%=student.family%>
+                                                            </h6>
+                                                            <p>
+                                                                <%=helper.enDigitsToFa(student.nationalCode)%>
+                                                            </p>
+                                                        </div>
+                                                        <%-student._id.toString()==user._id.toString() ? 'شما' : '' %>
+                                                    </div>
+
+                                                    <%})%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="chat">
+
+                                </div>
+                                <div class="tab-pane" id="online">
+                                    <div class="row">
+                                        <div class="col-md-8">
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <ul class="nav justify-content-end">
+                                                        <li class="nav-item">
+                                                            <a class="btn btn-secondary btn btn-light nav-link optionBtn"
+                                                                href="#" style="padding: 1em" id="camera">
+                                                                <i class="material-icons text-primary"
+                                                                    style="font-size: 30pt;">
+                                                                    videocam
+                                                                </i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="btn btn-secondary nav-link optionBtn" href="#"
+                                                                style="padding: 1em" id="mic">
+                                                                <i class="material-icons text-primary"
+                                                                    style="font-size: 30pt;">
+                                                                    mic
+                                                                </i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="btn btn-secondary nav-link optionBtn" href="#"
+                                                                style="padding: 1em" id="handUp">
+                                                                <i class="material-icons text-primary"
+                                                                    style="font-size: 30pt;">
+                                                                    emoji_people
+                                                                </i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="btn btn-secondary nav-link optionBtn" href="#"
+                                                                style="padding: 1em" id="shareScreen">
+                                                                <i class="material-icons text-primary"
+                                                                    style="font-size: 30pt;">
+                                                                    screen_share
+                                                                </i>
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="text-align: center;">
+                                                <div class="col-12">
+                                                    <video id="video" preload="auto" playsinline autoplay muted
+                                                        height="100%" width="100%"></video>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12" id="videos"></div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-9">
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-3" style="display: flex;">
+                                            <div class="card">
+                                                <div class="card-header card-header-info" style="text-align: center;">
+                                                    <p>دانش آموزان</p>
+                                                </div>
+                                                <div class="card-body"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="notification">
+                                    <div class="card">
+                                        <div class="card-header card-header-warning" style="text-align: right;">
+                                            <%if(user.type=='teacher' || user.isAdmin==true){%>
+                                                <a href="#" data-toggle="modal" data-toggle="modal"
+                                                    data-target="#addNotification"><i
+                                                        class="material-icons">note_add</i></a>
+                                                <%}%>
+                                                    <span style="font-size: 15pt;" class="card-title">اطلاعیه ها</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <%notifications.forEach(notification=> {%>
+                                                <div class="media border p-3">
+
+                                                    <img src="/images/icons/person.png" alt="John Doe"
+                                                        class="mr-3 mt-3 rounded-circle" style="width:60px;">
+                                                    <div class="media-body" style="text-align: right;">
+                                                        <h4>
+                                                            <%=notification.classId.teacher.name%>
+                                                                <%=notification.classId.teacher.family%>
+                                                        </h4>
+                                                        <h4>
+                                                            <%=notification.title%>
+                                                        </h4>
+                                                        <p>مورخ:
+                                                            <%=helper.convertEnglishDigitsToPersian(notification.date)%>
+                                                        </p>
+                                                        <%notification.body.forEach(line=> {%>
+                                                            <p>
+                                                                <%=line%>
+                                                            </p>
+                                                            <%})%>
+                                                                <%if(notification.file && notification.file !=='' ){%>
+                                                                    <p>
+                                                                        فایل ضمیمه
+                                                                        <a class="btn btn-success btn-fab btn-round"
+                                                                            href="/panel/notification/download/<%=notification.slug%>">
+                                                                            <i class="material-icons"
+                                                                                style="color: white; font-size: 20pt;">cloud_download</i>
+                                                                        </a>
+                                                                    </p>
+                                                                    <%}%>
+                                                                        <a href="/panel/notification/delete/<%=notification._id%>"
+                                                                            class="btn
+                                                                                    btn-danger
+                                                                                    btn-fab
+                                                                                    btn-round">
+                                                                            <i class="material-icons">delete</i>
+                                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <%})%>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="exercise">
+                                    <div class="card">
+                                        <div class="card-header card-header-info" style="text-align: right;">
+
+                                            <%if(user.type=='teacher' || user.isAdmin==true){%>
+                                                <a href="#" data-toggle="modal" data-target="#addPractice"><i
+                                                        class="material-icons">note_add</i></a>
+                                                <%}%>
+                                                    <span style="font-size: 15pt;" class="card-title">تمرینات</span>
+
+                                        </div>
+                                        <div class="card-body">
+
+                                            <%practices.forEach(practice=> {%>
+                                                <div class="media border p-3">
+                                                    <img src="/images/icons/person.png" alt="John Doe"
+                                                        class="mr-3 mt-3 rounded-circle" style="width:60px;">
+                                                    <div class="media-body" style="text-align: right;">
+                                                        <h4>
+                                                            <%=practice.classId.teacher.name%>
+                                                                <%=practice.classId.teacher.family%>
+                                                        </h4>
+                                                        <h4>
+                                                            <%=practice.title%>
+                                                        </h4>
+                                                        <p>مهلت:
+                                                            <%=helper.convertEnglishDigitsToPersian(practice.deadlineDate)%>
+                                                        </p>
+                                                        <%practice.description.forEach(line=> {%>
+                                                            <p>
+                                                                <%=line%>
+                                                            </p>
+                                                            <%})%>
+                                                                <div style="display: flex; flex-direction: column;">
+
+                                                                    <%if(practice.file && practice.file !=='' ){%>
+                                                                        <p>
+                                                                            فایل ضمیمه
+                                                                            <a class="btn btn-success btn-fab btn-round"
+                                                                                href="/panel/practice/download/<%=practice.slug%>">
+                                                                                <i class="material-icons"
+                                                                                    style="color: white; font-size: 20pt;">cloud_download</i>
+                                                                            </a>
+                                                                        </p>
+                                                                        <%}%>
+                                                                            <a href="/panel/practice/delete/<%=practice._id%>"
+                                                                                class="btn btn-danger
+                                                                                        btn-fab
+                                                                                        btn-round">
+                                                                                <i class="material-icons">delete</i>
+                                                                            </a>
+                                                                </div>
+                                                    </div>
+                                                </div>
+                                                <%})%>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="exam">
+                                    <div class="card">
+                                        <div class="card-header card-header-success" style="text-align: right;">
+                                            <%if(user.type=='teacher' || user.isAdmin==true){%>
+                                                <a href="#" data-toggle="modal" data-target="#addExam"><i
+                                                        class="material-icons">note_add</i></a>
+                                                <%}%>
+                                                    <span style="font-size: 15pt;">آزمون</span>
+                                        </div>
+                                        <div class="card-body"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="addPractice">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <h4 class="btn btn-danger">بستن</h4>
+                                    </button>
+                                    <h5 class="modal-title">افزودن تمرین</h5>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/panel/practice/add" method="POST" id="practiceForm"
+                                        enctype="multipart/form-data">
+
+                                        <input type="hidden" name="classId" value="<%=_class._id%>">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <input type="text" name="title" class="form-control"
+                                                        placeholder="عنوان تمرین">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <input type="text" id="deadlineDate" name="deadlineDate"
+                                                    class="form-control" placeholder="مهلت">
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="from-group" style="text-align: right;">
+                                                    <label for="description">توضیحات تمرین</label>
+                                                    <div id="descriptionEditor">
+
+                                                    </div>
+                                                    <input type="hidden" name="description" id="description">
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mt-3" style="text-align: right;">
+                                                <div class="form-group">
+
+                                                    <input type="file" id="file" name="file" class="filestyle"
+                                                        data-btnClass="btn-primary" data-input="false">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-block btn-round">ایجاد</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="addNotification">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <h4 class="btn btn-danger">بستن</h4>
+                                    </button>
+                                    <h5 class="modal-title">افزودن اطلاعیه</h5>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/panel/notification/add" method="POST" id="notificationForm"
+                                        enctype="multipart/form-data">
+                                        <input type="hidden" name="classId" value="<%=_class._id%>">
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <input type="text" name="title" class="form-control"
+                                                        placeholder="عنوان اطلاعیه">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3">
+                                                <div class="from-group" style="text-align: right;">
+                                                    <label>متن بدنه</label>
+
+                                                    <label for="body">توضیحات اطلاعیه</label>
+
+                                                    <div id="bodyEditor">
+
+                                                    </div>
+                                                    <input type="hidden" name="body" id="body">
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mt-3" style="text-align: right;">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="text" id="notificationDate" name="date"
+                                                            class="form-control" placeholder="تاریخ" autocomplete="off">
+                                                    </div>
+                                                    <div class="col-6">
+
+                                                        <input type="file" name="file" class="filestyle"
+                                                            data-btnClass="btn-primary" data-input="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-block btn-round">ایجاد</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="addExam">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <h4 class="btn btn-danger">بستن</h4>
+                                    </button>
+                                    <h5 class="modal-title">افزودن آزمون</h5>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/panel/class/addExam" method="POST" id="examSelectForm">
+                                        <input type="hidden" name="classId" value="<%=_class._id%>">
+
+                                        <div class="row">
+                                            <div class="col-12" style="text-align: right;">
+                                                <label>لیست آزمون ها</label>
+                                                <span class="examSelector"></span>
+                                                <input type="hidden" id="selectedExams" value="<%=selectedExams%>">
+                                                <input type="hidden" id="examList" value="<%=exams%>">
+                                                <input type="hidden" id="exams" name="exams">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success btn-block btn-round">افزودن آزمون
+                                            هابه
+                                            کلاس</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <script src="/js/bundle.min.js"></script>
+                    <script>
+                        const classSocket = io('http://192.168.43.171:4000/class');
+                        localStorage.setItem('cameraSharing', 'false');
+                    </script>
+
+                    <script src="/js/webrtc/onlineClass.js"></script>
+                    <script src="/js/persian-datepicker.min.js"></script>
+                    <script src="/js/persian-date.min.js"></script>
+                    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                    <script src="https://cdn.ckeditor.com/ckeditor5/24.0.0/classic/ckeditor.js"></script>
+
+
+                    <script>
+
+                        document.querySelectorAll('.optionBtn').forEach(btn => {
+                            btn.addEventListener('click', event => {
+                                event.preventDefault();
+                                if (btn.classList.contains('btn-success')) {
+                                    btn.classList.remove('btn-success');
+                                    btn.querySelector('i').classList.remove('text-light');
+                                    btn.querySelector('i').classList.add('text-primary');
+                                } else {
+                                    btn.classList.add('btn-success');
+                                    btn.querySelector('i').classList.remove('text-primary');
+                                    btn.querySelector('i').classList.add('text-light')
+                                }
+
+                            });
+                        });
+
+
+                        $(":file").filestyle({
+                            text: '',
+                            input: true,
+                            htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+                            btnClass: "btn-primary btn-fab btn-round",
+                            placeholder: 'انتخاب فایل'
+                        });
+                        $(document).ready(() => {
+                            $("#deadlineDate").pDatepicker({
+                                format: 'YYYY/MM/D-HH:mm',
+                                timePicker: {
+                                    enabled: true,
+                                    meridiem: {
+                                        enabled: true
+                                    }
+                                },
+                                initialValue: false,
+                            });
+                            $("#notificationDate").pDatepicker({
+                                format: 'YYYY/MM/D',
+                                initialValue: false,
+                                position: [-100, 0]
+                            });
+                            let toolbarOptions = [
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'direction': 'rtl' }],
+                                ['link', 'image'],
+                                [{ 'color': [] }, { 'background': [] }],
+
+                                [{ 'align': [] }],
+                            ]
+                            var practiceQuill = new Quill('#descriptionEditor', {
+                                theme: 'snow',
+                                modules: {
+                                    toolbar: toolbarOptions
+                                }
+                            });
+                            var notificationQuill = new Quill('#bodyEditor', {
+                                theme: 'snow',
+                                modules: {
+                                    toolbar: toolbarOptions
+                                }
+                            });
+
+                            let examList = JSON.parse(document.querySelector('#examList').value);
+                            let selectedExams = JSON.parse(document.querySelector('#selectedExams').value).map(item => item._id);
+
+                            let examListOptions = [];
+                            for (let item of examList) {
+                                examListOptions.push({
+                                    label: item.title,
+                                    value: item._id
+                                })
+                            }
+
+                            var examSelector = new SelectPure('.examSelector', {
+                                options: examListOptions,
+                                multiple: true,
+                                value: selectedExams,
+                                autocomplete: true,
+                                icon: "fa fa-times",
+                                placeholder: 'انتخاب کنید',
+
+                                classNames: {
+                                    select: "select-pure__select",
+                                    dropdownShown: "select-pure__select--opened",
+                                    multiselect: "select-pure__select--multiple",
+                                    label: "select-pure__label",
+                                    placeholder: "select-pure__placeholder",
+                                    dropdown: "select-pure__options",
+                                    option: "select-pure__option",
+                                    autocompleteInput: "select-pure__autocomplete",
+                                    selectedLabel: "select-pure__selected-label",
+                                    selectedOption: "select-pure__option--selected",
+                                    placeholderHidden: "select-pure__placeholder--hidden",
+                                    optionHidden: "select-pure__option--hidden",
+                                }
+
+                            });
+
+                            practiceQuill.formatText(0, practiceQuill.getLength(), 'align', 'right')
+                            notificationQuill.formatText(0, notificationQuill.getLength(), 'align', 'right')
+                            document.getElementById('practiceForm').addEventListener('submit', event => {
+
+                                let lines = practiceQuill.getText(0, practiceQuill.getLength());
+                                document.querySelector('#description').value = lines;
+                            })
+                            document.getElementById('notificationForm').addEventListener('submit', event => {
+
+                                let lines = notificationQuill.getText(0, notificationQuill.getLength());
+                                document.querySelector('#body').value = lines;
+                            })
+
+                            document.querySelector('#examSelectForm').addEventListener('submit', event => {
+
+                                document.querySelector('#exams').value = examSelector.value();
+                            })
+                        })
+                    </script>

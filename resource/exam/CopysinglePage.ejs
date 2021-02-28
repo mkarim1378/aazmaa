@@ -1,0 +1,157 @@
+<%-contentFor('body')%>
+
+
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs'), {success}%>
+    <div class="row d-flex">
+        <div class="col-12 text-center">
+            <h3><%=exam.title%></h3>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <%if(started && !ended){%>
+
+    <%let i = 1%>
+
+
+    <%exam.questions.forEach(_question => {%>
+    <form action="/panel/student/answer" method="POST" enctype="multipart/form-data" id="<%=`form${i}`%>">
+        <input type="hidden" name="question" value="<%=_question._id%>">
+        <input type="hidden" name="time2" value="<%=exam.time2%>">
+        <input type="hidden" name="date2" value="<%=exam.date2%>">
+        <input type="hidden" name="exam" value="<%=exam._id%>">
+        <div class="card">
+            <%if(_question.answers.length === 0){%>
+            <div class="card-header card-header-danger" style="text-align: right;">
+                <h4 class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></h4>
+
+            </div>
+            <%}else{%>
+            <div class="card-header" style="text-align: right;">
+                <h4 class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></h4>
+            </div>
+            <%}%>
+        <div class="card-body" style="text-align: right;">
+            <%Array.of(_question.question.forEach(line => {%>
+            <p><%=line%></p>
+            <%}))%>
+
+            <%if(_question.mediaType === 'video'){%>
+            <video id="videoPlaceholder" width="320" height="240" controls>
+                <source src="<%=_question.media%>">
+                Your browser does not support the video tag.
+            </video>
+            <%} else if(_question.mediaType === 'audio'){%>
+            <audio id="audioPlaceholder" controls>
+                <source src="<%=_question.media%>">
+
+                Your browser does not support the audio tag.
+            </audio>
+            <%} else if(_question.mediaType === 'image'){%>
+            <img src="<%=_question.media%>" width="300">
+            <%} else if(_question.mediaType === 'document'){%>
+            <span>فایل ضمیمه</span>
+            <a class="btn btn-success btn-fab btn-round" href="/panel/question/download/<%=_question._id%>">
+                <i class="material-icons" style="color: white; font-size: 20pt;">cloud_download</i>
+            </a>
+            <%}%>
+                <br>
+                        <%if(_question.questionType === 'short-answer'){%>
+            <label>پاسخ</label>
+            <input type="text" name="answer" class="form-control">
+
+            <%} else if(_question.questionType === 'true-false'){%>
+            <label>پاسخ</label>
+            <div class="radio">
+                <label><input type="radio" value="true" name="answer">صحیح</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" value="false" name="answer">غلط</label>
+            </div>
+
+            <%} else if(_question.questionType === '4-options'){%>
+            <label>پاسخ</label>
+            <div class="radio">
+                <label><input type="radio" value="false" name="answer">۱)
+                    <%=_question.options[0]%></label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" value="false" name="answer">۲)
+                    <%=_question.options[1]%></label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" value="false" name="answer">۳)
+                    <%=_question.options[2]%></label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" value="false" name="answer">۴)
+                    <%=_question.options[3]%></label>
+            </div>
+            <%} else if(_question.questionType === 'long'){%>
+            <label>پاسخ</label>
+            <input type="text" name="answer" class="form-control">
+            <%}%>
+            <%if(
+                _question.answerTypes.includes('video') || 
+                _question.answerTypes.includes('voice') || 
+                _question.answerTypes.includes('image') || 
+                _question.answerTypes.includes('document')
+            ){%>
+            <div class="col-6 mt-5">
+                <input type="file" name="file" class="filestyle">
+            </div>
+            <%}%>
+            <button type="submit" class="btn btn-success btn-round">ارسال</button>
+            
+            <%if(_question.answers.length > 0){%>
+            <a href="/panel/student/answer/delete/<%=_question._id%>" class="btn btn-danger btn-fab btn-round">
+                <i class="material-icons" style="font-size: 20pt;">delete</i>
+            </a>
+            <%}%>
+                    </div>
+                    
+                </div>
+                <%i++%>
+
+    </form>
+    <%})%>
+    <%}%>
+    
+</div>
+
+
+<script>
+    var timer = convertPersianDigitsToEnglish(document.querySelector('#timer').querySelectorAll('span')[1].innerText);
+    var hour = +timer.split(':')[0];
+    var minute = +timer.split(':')[1];
+    var second = +timer.split(':')[2];
+    if (!(('<%=currentDate.en%>' > '<%=exam.date2%>') || ('<%=currentDate.en%>' == '<%=exam.date2%>' &&
+        '<%=currentTime.en%>' > '<%=exam.time2%>'))) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:3000/api/currentTime');
+        xhr.onload = function () {
+            let interval = setInterval(() => {
+                hour = +timeApi.split(':')[0];
+                minute = +timeApi.split(':')[1];
+                second = +timeApi.split(':')[2];
+                if (`${hour}:${minue}` >= `<%=exam.time2%>`) {
+                    window.location.reload();
+                }
+            }, 50);
+        }
+        xhr.send();
+    }
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+
+</script>

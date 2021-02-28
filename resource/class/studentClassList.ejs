@@ -1,0 +1,79 @@
+<%-contentFor('body')%>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header card-header-warning" style="text-align: right;">
+                    <p class="card-title">شرکت در کلاس حدید</p>
+                </div>
+                <div class="card-body">
+                    <form action="/panel/student/class/join" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="code" class="form-control" placeholder="کد کلاس">
+                            <button type="submit" class=" btn btn-success btn-round btn-block">پیوستن</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12" style="display: flex; flex-wrap: wrap;">
+            <%classes.forEach(_class => {%>
+            <div class="card"
+                style="width: 20em; height: 30rem; margin: 1em 1em; display: flex; flex-direction: column; justify-content: space-between;">
+
+                <div>
+                    <%if(_class.image){%>
+                    <img class="card-img-top" src="<%=_class.image%>" width="10" style="height: 20em;">
+                    <%}else{%>
+                    <img class="card-img-top" src="/images/icons/imagePlaceholder.png" width="10" style="height: 20em;">
+                    <%}%>
+                    </div>
+                    <div>
+                        <div class="card-body" style="text-align: center;">
+                            <p><%=_class.title%></p>
+
+                    <a href="/panel/class/<%=_class._id%>" class="btn btn-info btn-round btn-block">ورود</a>
+                    <form class="left" action="/panel/student/class/left/<%=_class._id%>" method="GET">
+                        <button class="leftClass btn btn-danger btn-round">ترک کلاس</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <%})%>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.querySelectorAll('.leftClass').forEach(element => {
+        element.addEventListener('click', event => {
+        event.preventDefault();
+        Swal.fire({
+            title: 'آیا قصد ترک کلاس را دارید؟',
+            showDenyButton: true,
+            confirmButtonText: `بله`,
+            denyButtonText: `خیر`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.parentElement.submit();
+            }
+        })
+    });
+    })
+</script>

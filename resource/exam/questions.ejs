@@ -1,0 +1,223 @@
+<%-contentFor('body')%>
+<%-include('../includes/multiSelectStyle.ejs')%>
+
+
+
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<%-include('../includes/applyButton.ejs')%>
+<%-include('../includes/cancelButton.ejs')%>
+<link rel="stylesheet" href="/css/buttonReset.css">
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header card-header-warning">
+                <div class="card-title" style="text-align: right;">
+                    جست و جو
+                </div>
+
+            </div>
+            <div class="card-body">
+                <form action="" method="GET" id="searchForm">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="چیزی برای جست و جو بنویس">
+                                        <button type="submit" style="cursor: pointer; margin-left: 1em;"
+                                            class="search-submit">
+                                            <img src="/images/icons/search.png" width="40">
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3" style="display: flex;align-items: baseline;">
+                        <div class="col-3">فیلتر بر اساس</div>
+                        <div class="col-6">
+                            <span class="filterSelector"></span>
+                            <input type="hidden" name="filter" id="filter">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row d-flex justify-content-center">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="card-title" style="text-align: right;">
+                    لیست سوالات
+                </div>
+            </div>
+            <div class="card-body">
+                <input type="hidden" value="<%=mode%>" id="mode">
+                <table class="table" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th class="selectCol hidden">انتخاب</th>
+                            <th>صورت سوال</th>
+                            <th>دسته بندی</th>
+                            <th>نوع</th>
+                            <th>تنظیمات</th>
+                        </tr>
+                    </thead>
+                    <%
+                        let searchRegex;
+                        if(search){
+                            search = helper.convertEnglishDigitsToPersian(search);
+                            searchRegex = new RegExp(`${search}`, 'g');
+                        }else{
+                            searchRegex = new RegExp(``, 'g');
+                        }
+                    %>
+                    <%function generateTitle(title){
+                        if(search){
+                            return title.replace(searchRegex, `<i style="background-color: yellow">${search}</i>`);
+                        }else{
+                            return title
+                        }
+                    }%>
+                    <tbody>
+                        <%questions.docs.forEach(question => {%>
+                        <tr>
+                            <td class="selectCol hidden">
+                                <input type="hidden" value="<%=question._id%>" name="_id">
+                                <input type="checkbox" class="checkQuestion">
+                            </td>
+                            <td><%-generateTitle(question.question[0])%></td>
+                            <td>
+                                <%question.categories.forEach(category => {%>
+                                <span><%=category.title%></span>
+                                <%})%>
+                            </td>
+                            <td>
+                                <%if(question.questionType === 'true-false'){%>
+                                صحیح غلط
+                                <%}else if(question.questionType === 'short-answer'){%>
+                                پاسخ کوتاه
+                                <%}else if(question.questionType === '4-options'){%>
+                                چهار گزینه ای
+                                <%}else if(question.questionType === 'long'){%>
+                                جواب طولانی
+                                <%}else if(question.questionType == 'withFile'){%>
+                                پاسخ با فایل
+                                <%}%>
+                            </td>
+                            
+                            <td>
+                                <a href="/panel/question/edit/<%=question._id%>"><i
+                                    class="material-icons">settings</i></a>
+                                <a href="/panel/question/delete/<%=question._id%>"><i style="font-size: 20pt;"
+                                        class="material-icons text-danger">delete</i></a>
+                            </td>
+                        </tr>
+                        <%})%>
+                    </tbody>
+                </table>
+                <%-include('../includes/pagination', {pagination: questions})%>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/bundle.min.js"></script>
+<script>
+
+    if (localStorage.getItem('examSelectQuestionMode') == 'true') {
+        document.querySelectorAll('.selectCol').forEach(item => {
+            item.classList.remove('hidden');
+        });
+    }
+
+    document.querySelectorAll('.checkQuestion').forEach(item => {
+        let questions = localStorage.getItem('questionsAddToExam') ? JSON.parse(localStorage.getItem('questionsAddToExam')) : [];
+        if(questions.includes(item.parentElement.querySelector('[name="_id"]').value)){
+            item.checked = true;
+        }
+        item.addEventListener('change', event => {
+            
+            let questions = localStorage.getItem('questionsAddToExam') ? JSON.parse(localStorage.getItem('questionsAddToExam')) : [];
+            if (event.target.checked) {
+                questions.push(
+                    event.target.parentElement.querySelector('[name="_id"]').value
+                )
+                
+            }else{
+                questions = questions.filter(question => question != event.target.parentElement.querySelector('[name="_id"]').value);
+            }
+            localStorage.setItem('questionsAddToExam', JSON.stringify(questions));
+
+        })
+    })
+    $(document).ready(() => {
+        let filterOptions = [
+            {
+                label: 'بدون فیلتر',
+                value: 'none'
+            },
+            {
+                label: 'تاریخ نزولی',
+                value: 'dateDec'
+            },
+            {
+                label: 'تاریخ صعودی',
+                value: 'dateInc'
+            },
+            {
+                label: 'صحیح غلط',
+                value: 'true-false'
+            },
+            {
+                label: 'پاسخ کوتاه',
+                value: 'short-answer'
+            },
+            {
+                label: 'چهار گزینه ای',
+                value: '4-options'
+            },
+            {
+                label: 'پاسخ طولانی',
+                value: 'long'
+            }
+        ]
+
+        var filterSelector = new SelectPure('.filterSelector', {
+            options: filterOptions,
+            multiple: false,
+            autocomplete: true,
+            icon: "fa fa-times",
+            placeholder: 'انتخاب کنید',
+
+            onChange: value => {
+                document.getElementById('filter').value = value;
+            },
+            classNames: {
+                select: "select-pure__select",
+                dropdownShown: "select-pure__select--opened",
+                multiselect: "select-pure__select--multiple",
+                label: "select-pure__label",
+                placeholder: "select-pure__placeholder",
+                dropdown: "select-pure__options",
+                option: "select-pure__option",
+                autocompleteInput: "select-pure__autocomplete",
+                selectedLabel: "select-pure__selected-label",
+                selectedOption: "select-pure__option--selected",
+                placeholderHidden: "select-pure__placeholder--hidden",
+                optionHidden: "select-pure__option--hidden",
+            }
+
+        });
+    });
+
+    document.querySelector('#searchForm').addEventListener('submit', event => {
+        event.target.action = window.location.href;
+    });
+
+</script>

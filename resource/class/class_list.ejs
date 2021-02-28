@@ -1,0 +1,186 @@
+<%-contentFor('body')%>
+<%-include('../includes/multiSelectStyle.ejs')%>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<link rel="stylesheet" href="/css/buttonReset.css">
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-header card-header-warning">
+                <div class="card-title" style="text-align: right;">
+                    جست و جو
+                </div>
+
+            </div>
+            <div class="card-body">
+                <form action="/panel/class/list" method="GET" id="searchForm">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="submit"
+                                            style="cursor: pointer; margin-left: 1em;" class="search-submit"><img
+                                                src="/images/icons/search.png" width="40"></button>
+                                    </div>
+                                    <input type="text" name="search" class="form-control"
+                                        placeholder="چیزی برای جست و جو بنویس">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3" style="display: flex;align-items: baseline; direction: rtl;">
+                        <div class="col-md-3" style="text-align: right;">فیلتر بر اساس</div>
+                        <div class="col-md-6 col-sm-12">
+                            <span class="filterSelector"></span>
+                            <input type="hidden" name="filter" id="filter">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row d-flex justify-content-center">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="card-title" style="text-align: right;">
+                    لیست کلاس ها
+                </div>
+            </div>
+            <div class="card-body">
+                <%-include('../includes/error.ejs', {errors})%>
+                <%-include('../includes/success.ejs', {success})%>
+                <table class="table" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>عنوان کلاس</th>
+                            <th>ظرفیت</th>
+                            <th class="d-none d-md-table-cell">سال</th>
+                            <th class="d-none d-md-table-cell">سال تحصیلی</th>
+                            <th class="d-none d-md-table-cell">ترم تحصیلی</th>
+                            <th>تعداد دانشجو</th>
+                            <th>تنظیمات</th>
+                        </tr>
+                    </thead>
+                    <%
+                        let searchRegex;
+                        if(search){
+                            search = helper.convertEnglishDigitsToPersian(search);
+                            searchRegex = new RegExp(`${search}`, 'g');
+                        }else{
+                            searchRegex = new RegExp(``, 'g');
+                        }
+                    %>
+                    <%function generateTitle(title){
+                        if(search){
+                            return title.replace(searchRegex, `<i style="background-color: yellow">${search}</i>`);
+                        }else{
+                            return title
+                        }
+                    }%>
+                    <%function generateNumberColorful(data){
+                        if(search){
+                            let newDate = helper.convertEnglishDigitsToPersian(data);
+                            return newDate.replace(searchRegex, `<i style="background-color: yellow">${search}</i>`);
+                        }else{
+                            let newDate = helper.convertEnglishDigitsToPersian(data);
+                            return newDate;
+                        }
+                    }%>
+                    <tbody>
+                        <%classes.forEach(({_class, studentCount}) => {%>
+                        <tr>
+                            <td><a href="/panel/class/<%=_class._id%>"><%-generateTitle(_class.title)%></a></td>
+                            <td><%-generateNumberColorful(_class.capacity)%></td>
+                            <td class="d-none d-md-table-cell"><%-_class.year ? generateNumberColorful(_class.capacity): 'ثبت نشده'%></td>
+                            <td class="d-none d-md-table-cell"><%-_class.educationYear ? generateNumberColorful(_class.educationYear) : 'ثبت نشده'%></td>
+                            <td class="d-none d-md-table-cell">
+                                <%if(!_class.term){%>
+                                ثبت نشده
+                                <%}else{%>
+                                    <%if(_class.term === 'even'){%>
+                                        <%-generateTitle('ترم زوج')%>
+                                    <%}else {%>
+                                        <%-generateTitle('ترم فرد')%>
+                                    <%}%>
+                                <%}%>
+                            </td>
+                            <td><%=helper.enDigitsToFa(studentCount.toString())%></td>
+                            <td>
+                                <a href="/panel/class/edit/<%=_class._id%>">
+                                    <i class="material-icons">settings</i>
+                                </a>
+                                <a href="/panel/class/delete/<%=_class._id%>">
+                                    <i style="font-size: 20pt;" class="material-icons text-danger">delete</i>
+                                </a>
+                            </td>
+                        </tr>
+                        <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/bundle.min.js"></script>
+<script>
+    $(document).ready(() => {
+        document.querySelector('#searchForm').querySelector('[name="search"]').value = localStorage.getItem('class_search')
+        let filterOptions = [
+            {
+                label: 'بدون فیلتر',
+                value: 'none'
+            },
+            {
+                label: 'ترم تحصیلی زوج',
+                value: 'even'
+            },
+            {
+                label: 'ترم تحصیلی فرد',
+                value: 'odd'
+            },
+            {
+                label: 'سال تحصیلی نزولی',
+                value: 'eduYearDec'
+            },
+            {
+                label: 'سال تحصیلی صعودی',
+                value: 'eduYearInc'
+            }
+        ]
+
+        var filterSelector = new SelectPure('.filterSelector', {
+            options: filterOptions,
+            multiple: false,
+            autocomplete: true,
+            icon: "fa fa-times",
+            placeholder: 'انتخاب کنید',
+            value: localStorage.getItem('class_filter'),
+            onChange: value => {
+                document.getElementById('filter').value = value;
+            },
+            classNames: {
+                select: "select-pure__select",
+                dropdownShown: "select-pure__select--opened",
+                multiselect: "select-pure__select--multiple",
+                label: "select-pure__label",
+                placeholder: "select-pure__placeholder",
+                dropdown: "select-pure__options",
+                option: "select-pure__option",
+                autocompleteInput: "select-pure__autocomplete",
+                selectedLabel: "select-pure__selected-label",
+                selectedOption: "select-pure__option--selected",
+                placeholderHidden: "select-pure__placeholder--hidden",
+                optionHidden: "select-pure__option--hidden",
+            }
+
+        });
+        document.querySelector('#searchForm').addEventListener('submit', event => {
+            
+            localStorage.setItem('class_search', event.target.querySelector('[name="search"]').value);
+            localStorage.setItem('class_filter', filterSelector.value())
+        });
+    });
+</script>

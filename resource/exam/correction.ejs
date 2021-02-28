@@ -1,0 +1,42 @@
+<%-contentFor('body')%>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="card">
+        <div class="card-header card-header-success" style="text-align: right;">
+            <p class="card-title">تصحیح آزمون</p>
+        </div>
+        <div class="card-body">
+            <table class="table" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th>نام دانش آموز</th>
+                        <th>کد ملی</th>
+                        <th>تعداد پاسخ ها</th>
+                        <th>تنظیمات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%students.forEach(student => {%>
+                        <tr>
+                            <td><%=student.name%> <%=student.family%></td>
+                            <td><%=helper.convertEnglishDigitsToPersian(student.nationalCode)%></td>
+                            <td><%=helper.convertEnglishDigitsToPersian(student.answers.length) || '۰'%></td>
+                            <td>
+                                <a href="/panel/student/answers/<%=student._id%>/<%=exam._id%>" class="btn btn-info">
+                                    مشاهده
+                                    
+                                </a>
+                            </td>
+                        </tr>
+                    <%})%>
+                </tbody>
+        </table>
+        </div>
+    </div>
+
+
+
+</div>

@@ -1,0 +1,13 @@
+
+<button id="refreshBtn" type="button" class="not-in-print btn btn-info" style="position: fixed;bottom: <%=position.bottom%>em; left: <%=position.left%>em; z-index: 4;">
+    <span style="font-size: 10pt;">تاره کردن</span>
+    <span>
+        <img src="/images/icons/refresh.png" width="20">
+    </span>
+</button>
+
+<script>
+    document.querySelector('#refreshBtn').addEventListener('click', event => {
+        window.location.reload();
+    })
+</script>

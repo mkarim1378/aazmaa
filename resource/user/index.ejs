@@ -1,0 +1,101 @@
+<%-contentFor('body')%>
+<style>
+    .deleteUserBtn {
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: none;
+        background: transparent;
+        box-shadow: 0px 0px 0px transparent;
+        border: 0px solid transparent;
+        text-shadow: 0px 0px 0px transparent;
+
+    }
+
+    .deleteUserBtn:hover {
+        background: transparent;
+        box-shadow: 0px 0px 0px transparent;
+        border: 0px solid transparent;
+        text-shadow: 0px 0px 0px transparent;
+    }
+
+    .deleteUserBtn:active {
+        outline: none;
+        border: none;
+    }
+
+    .deleteUserBtn:focus {
+        outline: 0;
+    }
+</style>
+<div class="container">
+    <%-include('../includes/error.ejs'), {errors}%>
+    <%-include('../includes/success.ejs'), {success}%>
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header card-header-info" style="text-align: right;">
+                    <p class="card-title">کاربران</p>
+                </div>
+                <div class="card-body">
+                    <table class="table" style="text-align: center;">
+                        <thead>
+                            <th>نام کاربر</th>
+                            <th>کد ملی</th>
+                            <th>شماره تلفن</th>
+                            <th>تنظیمات</th>
+                        </thead>
+                        <tbody>
+                            <%users.forEach(user => {%>
+                            <tr>
+                                <td><%=user.name%> <%=user.family%></td>
+                                <td><%=user.nationalCode%></td>
+                                <td><%=user.phoneNumber%></td>
+                                <td style="display: flex; justify-content: center;">
+                                    <a href="/panel/user/edit/<%=user._id%>"><i class="material-icons"
+                                            style="font-size: 30pt;">settings</i></a>
+
+                                    <form action="/panel/user/delete/<%=user._id%>" method="GET">
+                                        <button type="submit" class="deleteUserBtn">
+                                            <i class="material-icons text-danger" style="font-size: 30pt;">delete</i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <%})%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+
+    document.querySelectorAll('.deleteUserBtn').forEach(item => {
+        item.addEventListener('click', event => {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'آیا قصد حذف کاربر را دارید؟',
+                showDenyButton: true,
+                confirmButtonText: `بله`,
+                denyButtonText: `خیر`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (event.target.parentElement.nodeName.toLowerCase() == 'button') {
+                        event.target.parentElement.parentElement.submit();
+                    } else {
+                        event.target.parentElement.submit();
+                    }
+
+                }
+            })
+        })
+    })
+</script>

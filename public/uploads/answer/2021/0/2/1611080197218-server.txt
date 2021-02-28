@@ -1,0 +1,20 @@
+server: {
+	ssh root@194.5.188.13
+	root
+	T1upRzPfEQ22jM
+}
+
+mongodb:{
+	user: admin
+	password:CzL6Xu724KbX565tMf5hWQ78
+}
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "CzL6Xu724KbX565tMf5hWQ78",
+    roles: [ { role: "readWrite", db: "langfeed_db" }]
+  }
+)
+
+

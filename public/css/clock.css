@@ -1,0 +1,17 @@
+#clockSvg {
+    display: block;
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .filler {
+    /* background: #20B7AF; */
+    background: #9e57b0;
+    position: absolute;
+    bottom: 45%;
+    top: 0;
+    left: 0;
+    right: 0;
+  }

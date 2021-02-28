@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <link rel="icon" type="image/png" href="/images/profile.png">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/apple-icon.png">
+  <title>
+    آزما
+  </title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+  <link rel="stylesheet" href="/css/buttonReset.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="canonical" href="https://www.creative-tim.com/product/material-dashboard" />
+  <!--  Social tags      -->
+
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+
+  <link href="https://fonts.googleapis.com/css?family=Cairo&amp;subset=arabic" rel="stylesheet">
+  <link href='https://css.gg/home-alt.css' rel='stylesheet'>
+  <link href="/assets/css/material-dashboard.min.css?v=2.1.2" rel="stylesheet" />
+  <link href="/assets/css/material-dashboard-rtl.min.css?v=1.1" rel="stylesheet" />
+  <link href="/css/vazir.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/3ecdca93cc.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+    integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link href="/css/persian-datepicker.css" rel="stylesheet">
+  <style>
+    .hidden {
+      display: none;
+    }
+    
+  </style>
+</head>
+
+
+<style>
+  body{
+    background-image: url("/images/bg4.jpg");
+    background-position:top center ;
+    
+    background-repeat: no-repeat;
+  }
+</style>
+<body>
+  <%-include('./includes/applyButton.ejs')%>
+  <%-include('./includes/cancelButton.ejs')%>
+  <div class="wrapper">
+    <div class="sidebar" data-color="azure" data-background-color="white" data-image="/assets/img/sidebar-1.jpg">
+
+      <div class="logo">
+        <a href="/" class="simple-text logo-normal">
+          <img src="/images/profile.png" width="100">
+        </a>
+      </div>
+
+      <div class="sidebar-wrapper">
+        <ul class="nav" style="padding: 1em 0 4em 0">
+          <li class="nav-item <%-path === 'home' ? 'active' : ''%>">
+            <a class="nav-link" href="/">
+              <i class="material-icons">home</i>
+              <p>خانه</p>
+            </a>
+          </li>
+
+          <%if(canClass){%>
+          <li class="nav-item dropdown  <%-path === 'classes' ? 'active' : ''%>">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+              <!-- <i class="material-icons">class</i> -->
+              <img src="<%-path === 'classes' ? '/images/icons/classActive.png' : '/images/icons/class.png'%>"
+                width="25" style="display: inline-block" id="classIcon">
+              <p style="display: inline-block; margin-right: 1em; color:'#b4b5b1'">
+                <span>کلاس</span>
+                <span>&#62;</span>
+              </p>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+
+                <a class="nav-link " href="/panel/class/list">
+                  <i class="material-icons">list_alt</i>
+                  <span>لیست کلاس ها</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="/panel/class/create">
+                  <i class="material-icons">note_add</i>
+                  <span>کلاس جدید</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <%}%>
+
+          <%if(canStudentClass){ %>
+          <li class="nav-item  <%-path === 'studentClasses' ? 'active' : ''%>">
+            <a class="nav-link" href="/panel/student/class/list">
+              <img src="<%-path === 'studentClasses' ? '/images/icons/classActive.png' : '/images/icons/class.png'%>"
+                width="25" style="display: inline-block" id="classIcon">
+              <p style="display: inline-block; margin-right: 1em; color:'#b4b5b1'">کلاس های من</p>
+            </a>
+          </li>
+          <%}%>
+          
+         
+
+          <%if(canExam){%>
+          <li class="nav-item dropdown  <%-path === 'exams' ? 'active' : ''%>">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+              <i class="material-icons">content_paste</i>
+              <p>
+                <span>آزمون</span>
+                <span>&#62;</span>
+              </p>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+
+                <a class="nav-link " href="/panel/exam/list">
+                  <i class="material-icons">list_alt</i>
+                  <span>لیست آزمون ها</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="/panel/exam/create">
+                  <i class="material-icons">note_add</i>
+                  <span>آزمون جدید</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <%}%>
+          
+          <%if(canStudentExam){ %>
+          <li class="nav-item  <%-path === 'studentExams' ? 'active' : ''%>">
+            <a class="nav-link" href="/panel/student/exam/list">
+              <i class="material-icons">content_paste</i>
+              <p>آزمون های من</p>
+            </a>
+          </li>
+          <%}%>
+  
+          <%if(canQuestion){%>
+          <li class="nav-item dropdown  <%-path === 'questions' ? 'active' : ''%>">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+              <img src="<%-path === 'questions' ? '/images/icons/questionActive.png' : '/images/icons/question.png'%>"
+                width="25" style="display: inline-block" id="classIcon">
+              <p style="display: inline-block; margin-right: 1em; color:'#b4b5b1'">
+                <span>سوال</span>
+                <span>&#62;</span>
+              </p>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="nav-link " href="/panel/question/list">
+                  <i class="material-icons">list_alt</i>
+                  <span>لیست سوالات</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="/panel/question/create">
+                  <i class="material-icons">note_add</i>
+                  <span>سوال جدید</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <%}%>
+
+          <%if(canStudents){%>
+          <li class="nav-item  <%-path === 'students' ? 'active' : ''%>">
+            <a class="nav-link" href="/panel/students">
+              <img src="<%-path === 'students' ? '/images/icons/studentActive.png' : '/images/icons/student.png'%>"
+                width="25" style="display: inline-block" id="classIcon">
+              <p style="display: inline-block; margin-right: 1em; color:'#b4b5b1'">شاگردها</p>
+            </a>
+          </li>
+          <%}%>
+          <%if(canAdminNotification){%>
+          <li class="nav-item  <%-path === 'admin-notification' ? 'active' : ''%>">
+            <a class="nav-link" href="/panel/students">
+              <i class="material-icons">notifications</i>
+              <p style="display: inline-block; margin-right: 1em; color:'#b4b5b1'">اعلانات</p>
+            </a>
+          </li>
+          <%}%>
+          
+          <%if(canAccess){%>
+          <li class="nav-item dropdown  <%-path === 'access' ? 'active' : ''%>">
+            <a class="nav-link" href="#" data-toggle="dropdown">
+              <i class="material-icons" style="font-size: 25pt;">accessibility_new</i>
+              <p style="display: inline-block; margin-right: 0em; color:'#b4b5b1'">
+                <span>دسترسی</span>
+                <span>&#62;</span>
+              </p>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="nav-link " href="/panel/permissions">
+                  <i class="material-icons" style="font-size: 25pt;">accessibility_new</i>
+                  <span>مدیریت مجوز</span>
+                </a>
+              </li>
+              <li>
+                <a class="nav-link" href="/panel/permission/add">
+                  <i class="material-icons" style="font-size: 25pt;">accessibility_new</i>
+                  <span>مجوز جدید</span>
+                </a>
+              </li>
+
+              <li>
+                <a class="nav-link" href="/panel/roles">
+                  <img src="/images/icons/role.png" width="30" style="display: inline-block" id="classIcon">
+                  <span>مدیریت سطح دسترسی</span>
+                </a>
+              </li>
+
+              <li>
+                <a class="nav-link" href="/panel/role/add">
+                  <img src="/images/icons/role.png" width="30" style="display: inline-block" id="classIcon">
+                  <span>سطح دسترسی جدید</span>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+
+          <%}%>
+
+          
+          <%if(canUser){%>
+          <li class="nav-item  <%-path === 'users' ? 'active' : ''%>">
+            <a class="nav-link" href="/panel/users">
+              <i class="material-icons">group</i>
+              <p>کاربران</p>
+            </a>
+          </li>
+          <%}%>
+
+
+          <li class="nav-item  <%-path === 'statistic' ? 'active' : ''%>">
+          <a class="nav-link" href="#">
+            <i class="material-icons" style="font-size: 20pt;">pie_chart</i>
+            <p>آمار</p>
+          </a>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-panel">
+      <!-- Navbar -->
+
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+            <span class="navbar-toggler-icon icon-bar"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end">
+            <form class="navbar-form">
+              <div class="input-group no-border">
+                <input type="text" value="" class="form-control" placeholder="جستجو...">
+                <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                  <i class="material-icons">search</i>
+                  <div class="ripple-container"></div>
+                </button>
+              </div>
+            </form>
+            <ul class="navbar-nav">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="http://example.com" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  <i class="material-icons">notifications</i>
+                  <span class="notification">۵</span>
+                  <p class="d-lg-none d-md-block">
+                    اعلان‌ها
+                  </p>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left">
+                  <a class="dropdown-item" href="#">محمدرضا به ایمیل شما پاسخ داد</a>
+                  <a class="dropdown-item" href="#">شما ۵ وظیفه جدید دارید</a>
+                  <a class="dropdown-item" href="#">از حالا شما با علیرضا دوست هستید</a>
+                  <a class="dropdown-item" href="#">اعلان دیگر</a>
+                  <a class="dropdown-item" href="#">اعلان دیگر</a>
+                </div>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="http://example.com" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  <i class="material-icons">person</i>
+                  <span class="notification">۵</span>
+
+                </a>
+                <div class="dropdown-menu dropdown-menu-left">
+                  <a class="dropdown-item" href="#">حساب کاربری</a>
+                  <a class="dropdown-item" href="/logout">
+                    <i class="material-icons">
+                      exit_to_app
+                    </i>خروج</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+
+
+      <div class="content">
+        <div class="container-fluid">
+          <p>تاریخ : <span id="date"><%=currentDate.fa%></span></p>
+          <p>ساعت :‌ <span id="timer"><%=fullTime.fa%></span></p>
+
+          <input type="hidden" id="currentDate" value="<%=currentDate.en%>">
+          <div class="row">
+            <div class="col-12">
+
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <%-defineContent('body')%>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <script src="https://unpkg.com/jalali-moment/dist/jalali-moment.browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+  <script src="/js/socketio/timeAndDate.js"></script>
+
+  <script src="/js/persian-datepicker.min.js"></script>
+  <script src="/js/persian-date.min.js"></script>
+  <script src="/js/jquery.js"></script>
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <script src="/assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script src="/assets/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="/js/bootstrap-filestyle.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Chartist JS -->
+  <script src="/assets/js/plugins/chartist.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/material-dashboard.min.js?v=2.1.2" type="text/javascript"></script>
+  <%- style %>
+  <script>
+
+    
+  </script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+
+    });
+  </script>
+  <!-- Sharrre libray -->
+  <script src="/js/checkModes.js"></script>
+  <script src="/js/notify.min.js"></script>
+  <script src="/assets/demo/jquery.sharrre.js"></script>
+  
+  <script>
+    
+    $(document).ready(function () {
+
+
+      
+
+      // Facebook Pixel Code Don't Delete
+      ! function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+      }(window,
+        document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+      try {
+        fbq('init', '111649226022273');
+        fbq('track', "PageView");
+
+      } catch (err) {
+        console.log('Facebook Track Error:', err);
+      }
+
+    });
+  </script>
+
+  <script>
+
+
+    $(document).ready(function () {
+
+      $().ready(function () {
+        $sidebar = $('.sidebar');
+        $sidebar_img_container = $sidebar.find('.sidebar-background');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+        // if( window_width > 767 && fixed_plugin_open == 'Dashboard' ){
+        //     if($('.fixed-plugin .dropdown').hasClass('show-dropdown')){
+        //         $('.fixed-plugin .dropdown').addClass('show');
+        //     }
+        //
+        // }
+
+        $('.fixed-plugin a').click(function (event) {
+          // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .background-color span').click(function () {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data-color', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data-color', new_color);
+          }
+        });
+
+        $('.fixed-plugin .img-holder').click(function () {
+          $full_page_background = $('.full-page-background');
+
+          $(this).parent('li').siblings().removeClass('active');
+          $(this).parent('li').addClass('active');
+
+
+          var new_image = $(this).find("img").attr('src');
+
+          if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+            $sidebar_img_container.fadeOut('fast', function () {
+              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+              $sidebar_img_container.fadeIn('fast');
+            });
+          }
+
+          if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+            $full_page_background.fadeOut('fast', function () {
+              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+              $full_page_background.fadeIn('fast');
+            });
+          }
+
+          if ($('.switch-sidebar-image input:checked').length == 0) {
+            var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+            $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+            $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+          }
+        });
+
+        $('.switch-sidebar-image input').on("switchChange.bootstrapSwitch", function () {
+          $full_page_background = $('.full-page-background');
+
+          $input = $(this);
+
+          if ($input.is(':checked')) {
+            if ($sidebar_img_container.length != 0) {
+              $sidebar_img_container.fadeIn('fast');
+              $sidebar.attr('data-image', '#');
+            }
+
+            if ($full_page_background.length != 0) {
+              $full_page_background.fadeIn('fast');
+              $full_page.attr('data-image', '#');
+            }
+
+            background_image = true;
+          } else {
+            if ($sidebar_img_container.length != 0) {
+              $sidebar.removeAttr('data-image');
+              $sidebar_img_container.fadeOut('fast');
+            }
+
+            if ($full_page_background.length != 0) {
+              $full_page.removeAttr('data-image', '#');
+              $full_page_background.fadeOut('fast');
+            }
+
+            background_image = false;
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function () {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+            materialDashboard.showSidebarMessage('Sidebar mini deactivated...');
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+            materialDashboard.showSidebarMessage('Sidebar mini activated...');
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function () {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function () {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+      });
+      if (window_width > 767) {
+        if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+          $('.fixed-plugin .dropdown').addClass('show');
+          $('.fixed-plugin .dropdown-menu').addClass('show');
+        }
+      }
+    });
+  </script>
+
+
+</body>
+<%- script %>
+
+</html>

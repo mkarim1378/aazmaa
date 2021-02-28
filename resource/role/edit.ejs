@@ -1,0 +1,97 @@
+<%-contentFor('body')%>
+
+<%-include('../includes/multiSelectStyle.ejs')%>
+
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="row d-flex justify-content-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header card-header-primary" style="text-align: right;">
+                    <p class="card-title">ویرایش دسترسی</p>
+                </div>
+                <div class="card-body">
+                    <form action="/panel/role/edit/<%=role._id%>" method="POST" id="form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="text" name="name" class="form-control" value="<%=role.name%>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="text" name="label" class="form-control" value="<%=role.label%>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input type="hidden" value="<%=permissions%>" id="permissionsHidden">
+                                    <input type="hidden" value="<%=selectedPermissions%>" id="selectedPermissions">
+                                    <input type="hidden" name="permissions" id="permissions">
+                                    <span class="permissionSelector"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success btn-round btn-block">ویرایش</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/js/bundle.min.js"></script>
+
+<script>
+    $(document).ready(() => {
+
+        let permissions = JSON.parse(document.querySelector('#permissionsHidden').value);
+        let permissionOptions = [];
+        let selected = JSON.parse(document.querySelector('#selectedPermissions').value).map(p => p._id);
+        console.log(selected);
+        for (let permission of permissions) {
+            permissionOptions.push({
+                label: permission.name,
+                value: permission._id
+            });
+        }
+
+        var permissionSelector = new SelectPure('.permissionSelector', {
+            placeholder: 'انتخاب مجوز',
+            options: permissionOptions,
+            multiple: true,
+            value: selected,
+            icon: "fa fa-times",
+            autocomplete: true,
+            classNames: {
+                select: "select-pure__select",
+                dropdownShown: "select-pure__select--opened",
+                multiselect: "select-pure__select--multiple",
+                label: "select-pure__label",
+                placeholder: "select-pure__placeholder",
+                dropdown: "select-pure__options",
+                option: "select-pure__option",
+                autocompleteInput: "select-pure__autocomplete",
+                selectedLabel: "select-pure__selected-label",
+                selectedOption: "select-pure__option--selected",
+                placeholderHidden: "select-pure__placeholder--hidden",
+                optionHidden: "select-pure__option--hidden",
+            }
+
+        })
+        document.querySelector('#form').addEventListener('submit', event => {
+            document.querySelector('#permissions').value = permissionSelector.value();
+        });
+    });
+</script>

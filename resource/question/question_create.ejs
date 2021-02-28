@@ -1,0 +1,354 @@
+<%-contentFor('body')%>
+<%-include('../includes/multiSelectStyle.ejs')%>
+
+
+
+<div class="row d-flex justify-content-center">
+    <div class="col-8">
+        <div class="card">
+
+            <div class="card-header card-header-primary">
+                <div class="card-title" style="text-align: right;">
+                    سوال جدید
+                </div>
+            </div>
+            <div class="card-body" style="text-align: right;">
+                <%-include('../includes/error.ejs', {errors})%>
+                <%-include('../includes/success.ejs', {success})%>
+                <form action="/panel/question/create" method="POST" id="form" enctype="multipart/form-data">
+                    <input type="hidden" name="html" id="html">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <div id="questionEditor">
+
+                                </div>
+                                <input type="hidden" name="question" id="question">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="category">دسته بندی</label>
+                                        <span class="categoriesSelector"></span>
+                                        <input type="hidden" id="categories" name="categories">
+                                        <input type="hidden" id="categoriesList" value="<%=categories%>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <select id="questionType" name="questionType" class="form-control">
+                                        <option value="" selected>----نوع سوال----</option>
+                                        <option value="withFile">پاسخ با فایل</option>
+                                        <option value="true-false">صحیح غلط</option>
+                                        <option value="short-answer">پاسخ کوتاه</option>
+                                        <option value="4-options">چهارگزینه ای</option>
+                                        <option value="long">تشریحی</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select id="mediaType" name="mediaType" class="form-control">
+                                        <option value="" selected>---- نوع رسانه ----</option>
+                                        <option value="none">ندارد</option>
+                                        <option value="audio">صوت</option>
+                                        <option value="image">تصویر</option>
+                                        <option value="video">ویدیو</option>
+                                        <option value="document">سند</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="answerType">نوع پاسخ</label>
+                                        <span class="answerTypeSelector"></span>
+                                        <input type="hidden" name="answerTypes" id="answerTypes">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6"
+                            style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+                            <div div class="row">
+
+                                <div class="col-12" id="mediaShow" style="display: none;">
+                                    <video id="videoPlaceholder" width="320" height="240" controls
+                                        style="display: none;">
+                                        <source src="">
+
+                                        Your browser does not support the video tag.
+                                    </video>
+
+                                    <audio id="audioPlaceholder" controls style="display: none;">
+                                        <source src="">
+
+                                        Your browser does not support the audio tag.
+                                    </audio>
+
+                                    <a href="#" id="deleteImage" style="display: none;">
+                                        <img src="/images/icons/x-button.png" width="30"
+                                            style="position: absolute; top:2em; left: 1em"></a>
+                                    <img id="imagePlaceholder" src="/images/icons/upload.png" width="200"
+                                        style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div id="mediaInput" style="display: none;">
+                                        <input type="file" id="media" name="media" class="filestyle"
+                                            data-btnClass="btn-primary" data-input="false">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="4-options" style="display: none;">
+                                <textarea name="options" class="form-control" placeholder="گزینه ۱"
+                                    style="margin-top: 1em;"></textarea>
+                                <textarea name="options" class="form-control" placeholder="گزینه ۲"
+                                    style="margin-top: 1em;"></textarea>
+                                <textarea name="options" class="form-control" placeholder="گزینه ۳"
+                                    style="margin-top: 1em;"></textarea>
+                                <textarea name="options" class="form-control" placeholder="گزینه ۴"
+                                    style="margin-top: 1em;"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div id="audio" style="display: none;"></div>
+                            <div id="image" style="display: none;"></div>
+                            <div id="video" style="display: none;"></div>
+                            <div id="document" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-5">
+                            <input type="text" name="grade" placeholder="نمره" class="form-control">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block btn-round">ایجاد</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="/js/bundle.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://unpkg.com/quill-image-compress@1.2.11/dist/quill.imageCompressor.min.js"></script>
+
+<script>
+    
+    if (localStorage.getItem('question_questionType')) {
+        document.getElementById('questionType').value = JSON.parse(localStorage.getItem('question_questionType')).type;
+    }
+    if (localStorage.getItem('question_mediaType')) {
+        document.getElementById('mediaType').value = JSON.parse(localStorage.getItem('question_mediaType')).type;
+    }
+
+
+    document.getElementById('questionType').addEventListener('change', event => {
+        let questionType = { type: event.target.value };
+        localStorage.setItem('question_questionType', JSON.stringify(questionType));
+    })
+    document.getElementById('mediaType').addEventListener('change', event => {
+        let questionType = { type: event.target.value };
+        localStorage.setItem('question_mediaType', JSON.stringify(questionType));
+    })
+    if (document.getElementById('questionType').value == '4-options') {
+        document.getElementById('4-options').style.display = 'block';
+    }
+    let toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'direction': 'rtl' }],
+        ['link', 'image'],
+        [{ 'color': [] }, { 'background': [] }],
+
+        [{ 'align': [] }],
+    ]
+    Quill.register("modules/imageCompressor", imageCompressor);
+    var quill = new Quill('#questionEditor', {
+        theme: 'snow',
+        modules: {
+            toolbar: toolbarOptions,
+            imageCompressor: {
+            quality: 0.9,
+            maxWidth: 500,
+            maxHeight: 500,
+            imageType: 'image/jpeg'
+          }
+        }
+    });
+    quill.formatText(0, quill.getLength(), 'align', 'right')
+    
+    let categoriesSelectorOptions = [
+
+    ]
+    
+    let answerTypeOptions = [
+        {
+            label: 'متن',
+            value: 'text'
+        },
+        {
+            label: 'صوت',
+            value: 'voice'
+        },
+        {
+            label: 'عکس',
+            value: 'image'
+        },
+        {
+            label: 'ویدیو',
+            value: 'video'
+        },
+        {
+            label: 'سند',
+            value: 'document'
+        }
+    ]
+    let categories = document.querySelector('#categoriesList').value;
+    
+    let categoriesList = JSON.parse(document.querySelector('#categoriesList').value);
+    for (let item of categoriesList) {
+        categoriesSelectorOptions.push({
+            label: item.title,
+            value: item._id
+        });
+    }
+    var categoriesSelector = new SelectPure('.categoriesSelector', {
+        options: categoriesSelectorOptions,
+        multiple: true,
+        autocomplete: true,
+        icon: "fa fa-times",
+        placeholder: 'انتخاب کنید',
+        onChange: value => console.log(value),
+        classNames: {
+            select: "select-pure__select",
+            dropdownShown: "select-pure__select--opened",
+            multiselect: "select-pure__select--multiple",
+            label: "select-pure__label",
+            placeholder: "select-pure__placeholder",
+            dropdown: "select-pure__options",
+            option: "select-pure__option",
+            autocompleteInput: "select-pure__autocomplete",
+            selectedLabel: "select-pure__selected-label",
+            selectedOption: "select-pure__option--selected",
+            placeholderHidden: "select-pure__placeholder--hidden",
+            optionHidden: "select-pure__option--hidden",
+        }
+
+    })
+    var answerTypeSelector = new SelectPure('.answerTypeSelector', {
+        options: answerTypeOptions,
+        multiple: true,
+        autocomplete: true,
+        icon: "fa fa-times",
+        placeholder: 'انتخاب کنید',
+        value: ['text'],
+        onChange: value => console.log(value),
+        classNames: {
+            select: "select-pure__select",
+            dropdownShown: "select-pure__select--opened",
+            multiselect: "select-pure__select--multiple",
+            label: "select-pure__label",
+            placeholder: "select-pure__placeholder",
+            dropdown: "select-pure__options",
+            option: "select-pure__option",
+            autocompleteInput: "select-pure__autocomplete",
+            selectedLabel: "select-pure__selected-label",
+            selectedOption: "select-pure__option--selected",
+            placeholderHidden: "select-pure__placeholder--hidden",
+            optionHidden: "select-pure__option--hidden",
+        }
+
+    });
+    document.querySelector('#form').addEventListener('submit', event => {
+        
+        document.querySelector('#html').value = quill.root.innerHTML;
+        let lines = quill.getText(0, quill.getLength());
+        document.querySelector('#question').value = lines;
+        document.querySelector('#answerTypes').value = answerTypeSelector.value();
+        document.querySelector('#categories').value = categoriesSelector.value();
+    });
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+    document.getElementById('media').addEventListener('change', event => {
+        let url = URL.createObjectURL(event.target.files[0]);
+        document.querySelector('#imagePlaceholder').src = url;
+        document.getElementById('deleteImage').style.display = 'inline-block';
+    });
+    document.getElementById('deleteImage').addEventListener('click', event => {
+        document.querySelector('#imagePlaceholder').src = '/images/icons/upload.png'
+        document.getElementById('image').value = '';
+        $(":file").filestyle('clear');
+        document.getElementById('deleteImage').style.display = 'none';
+
+    });
+    document.getElementById('questionType').addEventListener('change', function (event) {
+        if (this.value === '4-options') {
+            document.getElementById('4-options').style.display = 'block';
+        } else {
+            document.getElementById('4-options').style.display = 'none';
+        }
+    });
+    document.getElementById('mediaType').addEventListener('change', function (event) {
+        if (this.value && this.value !== 'none') {
+            document.getElementById('mediaShow').style.display = 'block';
+
+            document.getElementById('mediaInput').style.display = 'flex';
+            if (this.value === 'video') {
+                document.getElementById('imagePlaceholder').style.display = 'none';
+                document.getElementById('audioPlaceholder').style.display = 'none';
+                document.getElementById('videoPlaceholder').style.display = 'block';
+            }
+            else if (this.value === 'audio') {
+                document.getElementById('imagePlaceholder').style.display = 'none';
+                document.getElementById('audioPlaceholder').style.display = 'block';
+                document.getElementById('videoPlaceholder').style.display = 'none';
+            }
+            else if (this.value === 'document') {
+                document.getElementById('imagePlaceholder').style.display = 'none';
+                document.getElementById('audioPlaceholder').style.display = 'none';
+                document.getElementById('videoPlaceholder').style.display = 'none';
+            }
+            else if (this.value === 'image') {
+                document.getElementById('imagePlaceholder').style.display = 'block';
+                document.getElementById('audioPlaceholder').style.display = 'none';
+                document.getElementById('videoPlaceholder').style.display = 'none';
+            }
+
+        } else {
+            document.getElementById('mediaShow').style.display = 'none';
+            document.getElementById('mediaInput').style.display = 'none'
+        }
+
+    });
+    document.getElementById('media').addEventListener('change', function (event) {
+        console.log(event);
+    });
+</script>

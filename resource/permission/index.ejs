@@ -1,0 +1,33 @@
+<%-contentFor('body')%>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header card-header-primary" style="text-align: right;">
+                    <p class="card-title">مدیریت دسترسی</p>
+                </div>
+                <div class="card-body">
+                    <table class="table" style="text-align: center;">
+                        <thead>
+                            <th>مجوز</th>
+                            <th>توضیحات</th>
+                            <th>تنظیمات</th>
+                        </thead>
+                        <tbody>
+                            <%permissions.forEach(permission => {%>
+                                <tr>
+                                    <td><%=permission.name%></td>
+                                    <td><%=permission.label%></td>
+                                    <td>
+                                        <a href="/panel/permission/edit/<%=permission._id%>" ><i class="material-icons" style="font-size: 30pt;">settings</i></a>
+                                        <a href="/panel/permission/delete/<%=permission._id%>" ><i class="material-icons text-danger" style="font-size: 30pt;">delete</i></a>
+                                    </td>
+                                </tr>
+                            <%})%>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

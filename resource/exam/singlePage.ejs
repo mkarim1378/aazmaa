@@ -1,0 +1,249 @@
+<%-contentFor('body')%>
+<style>
+    
+    @-webkit-keyframes load8 {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+  
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  
+    @keyframes load8 {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+  
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  
+    @media print {
+        *{
+            -webkit-print-color-adjust: exact; 
+        }
+        .not-in-print{
+            display: none;
+        }
+    }
+    @page{
+        size: A4
+    }
+    .break{
+        page-break-after: always;
+    }
+    .card{
+        page-break-after: auto;
+    }
+</style>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<div class="row d-flex justify-content-center">
+    <div class="col-3">
+        <div class="card">
+            <div class="card-body">
+                <%-include('../includes/timer.ejs', {time2: exam.time2, time1: exam.time1, started, ended})%>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs'), {success}%>
+    <%if(ended){%>
+        <h4 class="text-center text-danger not-in-print">آزمون به پایان رسیده است</h4>
+    <%}%>
+    <div class="row d-flex justify-content-center">
+        <div class="col-2">
+            <p class="bg-success text-center text-light">پاسخ صحیح</p>
+        </div>
+        <div class="col-2">
+            <p class="bg-danger text-center text-light">پاسخ غلط</p>
+        </div>
+        <div class="col-2">
+            <p class="bg-warning text-center">پاسخ داده نشده</p>
+        </div>
+        <div class="col-2">
+            <p class="bg-light text-center" style="border: 1px solid black;">پاسخ داده شده</p>
+        </div>
+    </div>
+    <div class="row d-flex">
+        <div class="col-4 text-right">
+            <span>نمره آزمون :‌ <%-examGrade ? helper.enDigitsToFa(examGrade) : '۰'%></span>
+            <span>از</span>
+            <span><%-exam.totalGrade ? helper.enDigitsToFa(exam.totalGrade) : 'ثبت نشده'%></span>
+            <span>نمره</span>
+            <br>
+            <%if(ended){%>
+                <a href="/panel/exam/export/pdf/<%=exam._id%>" class="not-in-print btn btn-danger" style="padding: 1em;">
+                    <img src="/images/icons/pdfWhite.png" width="30">
+                </a>
+            <%}%>
+        </div>
+        
+        <div class="col-4 text-center">
+            <h3><%=exam.title%></h3>
+        </div>
+        <div class="col-4 text-left">
+            
+        </div>
+    </div>
+    
+</div>
+
+<div class="container">
+
+    
+
+        <%let i = 1%>
+
+        <form action="/panel/student/answer" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="time2" value="<%=exam.time2%>">
+            <input type="hidden" name="date2" value="<%=exam.date2%>">
+            <input type="hidden" name="exam" value="<%=exam._id%>">
+            <%questions.forEach(question => {%>
+                <input type="hidden" name="question-<%=i%>" value="<%=question._id%>">    
+                <div class="card">
+                    <%if(question.answers.length == 0){%>
+                        <div class="card-header card-header-warning" style="text-align: right;">
+                            <span class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></span>
+                            
+                        </div>
+                    <%}else if(!question.answers[0].corrected){%>
+                        <div class="card-header" style="text-align: right;">
+                            <p class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></p>
+                        </div>
+                    <%}else if(question.answers[0].status == false){%>
+                        <div class="card-header card-header-danger" style="text-align: right;">
+                            <p class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></p>
+                        </div>
+                    <%}else if(question.answers[0].status == true){%>
+                        <div class="card-header card-header-success" style="text-align: right;">
+                            <p class="card-title">سوال <%=helper.convertEnglishDigitsToPersian(i)%></p>
+                        </div>
+                    <%}%>
+                    <div class="card-body" style="text-align: right;">
+                        <!-- <%question.question.forEach(line => {%>
+                            <p><%=line%></p>
+                        <%})%> -->
+                        <%-question.html%>
+                        <%if(question.media){%>
+                            <p>
+                                فایل ضمیمه
+                                <a class="btn btn-success btn-fab btn-round"
+                                    href="/panel/question/download/<%=question._id%>">
+                                    <i class="material-icons"
+                                        style="color: white; font-size: 20pt;">cloud_download</i>
+                                </a>
+                            </p>
+                        <%}%>
+                        <hr>
+                        <h5>پاسخ: </h5>
+                        <%if(question.questionType == 'true-false'){%>
+                            <%let sahih = 'صحیح'%>
+                            <%let qalat = 'غلط'%>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio"  <%-ended ? 'disabled' : ''%> value="true" name="answer-<%=i%>" <%=question.answers[0] ? (question.answers[0].answer == 'true' ?  'checked' : '') : ''%> > <%=sahih%>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio"  <%-ended ? 'disabled' : ''%> value="false" name="answer-<%=i%>" <%=question.answers[0] ? (question.answers[0].answer == 'false' ?  'checked' : '') : ''%>> <%=qalat%>
+                                    
+                                </label>
+                            </div>
+                        <%}else if(question.questionType == 'short-answer'){%>
+                            <div class="col-5">
+                                <input type="text"  <%-ended ? 'disabled' : ''%> name="answer-<%=i%>" class="form-control" placeholder="پاسخ کوتاه" value="<%=question.answers[0] ? question.answers[0].answer : ''%>">
+                            </div>
+                        <%}else if(question.questionType == '4-options'){%>
+                            <%for(let j = 0; j < 4; j++){%>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio"  <%-ended ? 'disabled' : ''%> value="<%=(j + 1)%>-<%=question.options[j]%>"  name="answer-<%=i%>" <%=question.answers[0] ? (+question.answers[0].answer.split('-')[0] - 1 == j ? 'checked' : '') : ''%> > <%=question.options[j]%>
+                                    </label>
+                                    
+                                </div>
+                            <%}%>
+                            
+                        <%}else if(question.questionType == 'long'){%>
+                            <%if(question.answers[0]){%>
+                                <textarea  <%-ended ? 'disabled' : ''%> name="answer-<%=i%>" class="form-control" rows="10" placeholder="پاسخ تشریحی"><%=question.answers[0] ? question.answers[0].answer : ''%></textarea>
+                            <%}else{%>
+                                <textarea  <%-ended ? 'disabled' : ''%> name="answer-<%=i%>" class="form-control" rows="10" placeholder="پاسخ تشریحی"></textarea>
+                            <%}%>
+                            
+                        <%}%>
+                        
+                        <%if(question.answerTypes.includes('voice') || 
+                            question.answerTypes.includes('image') || 
+                            question.answerTypes.includes('video') ||
+                            question.answerTypes.includes('document')){%>
+                            <hr>
+                            <div class="col-10">
+                                <h6>فایل ضمیمه پاسخ</h6>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="file" name="file" class="filestyle"
+                                        data-btnClass="btn-primary" data-input="false" <%-ended ? 'disabled' : ''%>>
+                                    </div>
+                                    <div class="col-5">
+                                        <%if(question.answers[0]){%>
+                                            <%if(question.answers[0].answer.media){%>
+                                                <p>
+                                                    فایل ضمیمه قبلی
+                                                    <a class="btn btn-success btn-fab btn-round"
+                                                        href="/panel/question/download/<%=question._id%>">
+                                                        <i class="material-icons"
+                                                            style="color: white; font-size: 20pt;">cloud_download</i>
+                                                    </a>
+                                                </p>
+                                            <%}%>
+                                        <%}%>
+                                    </div>
+                                </div>
+
+                                
+                                
+                                
+                            </div>
+                        <%}%>
+                        <p class="text-left"><%=helper.enDigitsToFa(question.grade)%> نمره</p>
+                    </div>
+                    
+                </div>
+                <%if(i % 2 == 0){%>
+                    <input type="hidden" class="break">
+                <%}%>
+            <%i++%>
+            <%})%>
+            <%if(!ended){%>
+                <button type="submit" class="btn btn-success btn-block btn-round">ارسال</button>
+            <%}%>
+            
+        </form>
+    
+</div>
+
+
+<script>
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+    $(document).ready(() => {
+        document.querySelector('#refreshBtn').addEventListener('click', event => {
+            window.location.reload();
+        });
+    });
+</script>

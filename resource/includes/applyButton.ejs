@@ -1,0 +1,100 @@
+<style>
+  .loader,
+  .loader:after {
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+  }
+
+  #loader {
+    display: none;
+  }
+
+  .loader {
+
+    margin-right: 1em;
+    font-size: 10px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 0.3em solid rgba(255, 255, 255, 0.2);
+    border-right: 0.3em solid rgba(255, 255, 255, 0.2);
+    border-bottom: 0.3em solid rgba(255, 255, 255, 0.2);
+    border-left: 0.3em solid #ffffff;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+  }
+
+  @-webkit-keyframes load8 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes load8 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+</style>
+<form id="applyQuestionsForm" class="hidden" action="/panel/question/addToExam" method="POST"
+  style="position: fixed; bottom:-0.3em; left: 16em; z-index: 4;">
+  <input type="hidden" name="selectedQuestions" value="" id="selectedQuestions">
+  <input type="hidden" name="examId" id="examId">
+  <button id="applyButton" type="submit" class="btn btn-success"
+    style="display: flex; justify-content: center; align-items: center;">
+    اعمال تغییرات
+    <div class="loader" id="loader"></div>
+
+  </button>
+
+</form>
+
+<script>
+  if (localStorage.getItem('mode') == 'exam_addQuestion_mode') {
+    document.getElementById('applyQuestionsForm').style.display = 'block';
+  }
+
+  document.getElementById('applyQuestionsForm').addEventListener('submit', event => {
+    event.preventDefault();
+    let examId = localStorage.getItem('examId');
+    let questions = [];
+    if (localStorage.getItem('newQuestions')) {
+      questions = JSON.parse(localStorage.getItem('newQuestions'));
+    }
+    if(localStorage.getItem('selectedQuestions') && JSON.parse(localStorage.getItem('selectedQuestions')).length > 0){
+      let selected = JSON.parse(localStorage.getItem('selectedQuestions'));
+      
+      questions = [...questions, ...selected];
+    }
+    console.log('questions: ', questions);
+    document.querySelector('#selectedQuestions').value = JSON.stringify(questions);
+    document.querySelector('#examId').value = examId;
+    document.getElementById('loader').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+      localStorage.clear();
+      localStorage.setItem('mode', 'none');
+      event.target.submit();
+    }, 1500);
+
+
+    document.querySelectorAll('.selectCol').forEach(item => {
+      item.classList.add('hidden');
+    })
+  });
+</script>

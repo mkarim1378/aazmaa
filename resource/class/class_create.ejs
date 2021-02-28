@@ -1,0 +1,239 @@
+<%-contentFor('body')%>
+<%-include('../includes/multiSelectStyle.ejs')%>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-8 col-sm-12">
+        <div class="card">
+
+            <div class="card-header card-header-info">
+                <div class="card-title" style="text-align: right;">
+                    کلاس جدید
+                </div>
+            </div>
+            <div class="card-body">
+                <%-include('../includes/error.ejs', {errors})%>
+                <%-include('../includes/success.ejs', {success})%>
+                <form action="/panel/class/create" method="POST" id="form" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input type="text" name="title" placeholder="نام کلاس"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <input type="number" name="capacity" placeholder="حداکثر ظرفیت"
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row" style="margin: 0; display: flex; align-items: baseline; justify-content: center; justify-content: space-evenly;">
+                                        <div class="col-4">کلاس را برای</div>
+                                        <div class="col-5">
+                                            <span class="placeSelector"></span>
+                                            <input type="hidden" id="place" name="place">
+                                        </div>
+                                        <div class="col-3">می سازم</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-12">
+
+
+                                                        <select name="educationYear" id="educationYear"
+                                                            class="form-control universityMode schoolMode">
+                                                            <option value="">سال تحصیلی را انتخاب کنید</option>
+                                                            <%for(let i = educationYear.from; i <= educationYear.to; i++){%>
+                                                            <option value="<%=`${i}-${i + 1}`%>">سال تحصیلی <%=i%> -
+                                                                <%=i + 1%></option>
+                                                            <%}%>
+                                                            </select>
+                                                            <select name="term" id="term" class="form-control universityMode" style="display: none;">
+                                                                <option value="">ترم تحصیلی را انتخاب کنید</option>
+                                                                <option value="even">ترم زوج</option>
+                                                                <option value="odd">ترم فرد</option>
+                                                            </select>
+                                                        
+                                                        
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <select name="month" id="month" class="form-control personalMode instituteMode" style="display: none;">
+                                                                        <option value="">ماه را انتخاب کنید</option>
+                                                                        <option value="farvardin">فروردین</option>
+                                                                        <option value="ordibehesht">اردیبهشت</option>
+                                                                        <option value="khordad">خرداد</option>
+                                                                        <option value="tir">تیر</option>
+                                                                        <option value="mordad">مرداد</option>
+                                                                        <option value="shahrivar">شهریور</option>
+                                                                        <option value="mehr">مهر</option>
+                                                                        <option value="aban">آبان</option>
+                                                                        <option value="azar">وای از آذر</option>
+                                                                        <option value="dey">دی</option>
+                                                                        <option value="bahman">بهمن</option>
+                                                                        <option value="esfand">اسفند</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <select name="year" id="year" class="form-control personalMode instituteMode" style="display: none;">
+                                                                        <option value="">سال را انتخاب کنید</option>
+                                                                        <%for(let i = 1399; i <= 1420; i++){%>
+                                                            <option value="<%=i%>"><%=i%></option>
+                                                            <%}%>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                            <label>یه عکس برای کلاس انتخاب کن (‌اختیاری)</label>
+                            <img src="/images/icons/imagePlaceholder.png" width="150" height="150" id="imagePlaceholder" style="border-radius: 1.5em;">
+                            <a href="#" id="deleteImage" style="display: none;"><img src="/images/icons/x-button.png" width="30" style="position: absolute; top:2em; left: 1em"></a>
+                            <input type="file" id="image" name="image" class="filestyle" data-btnClass="btn-primary"
+                                data-input="false" accept=".jpg, .jpeg, .svg, .png">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block btn-round">ایجاد</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+<script src="/js/bundle.min.js"></script>
+<script src="/js/socketio/uploadProgress.js"></script>
+<script>
+
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+    $(document).ready(function () {
+        document.getElementById('image').addEventListener('change', event => {
+            let url = URL.createObjectURL(event.target.files[0]);
+            document.querySelector('#imagePlaceholder').src = url;
+            document.getElementById('deleteImage').style.display = 'inline-block';
+        });
+        document.getElementById('deleteImage').addEventListener('click', event => {
+            document.querySelector('#imagePlaceholder').src = '/images/icons/imagePlaceholder.png'
+            document.getElementById('image').value = '';
+            $(":file").filestyle('clear');
+            document.getElementById('deleteImage').style.display = 'none';
+            
+        });
+        let placeOptions = [
+            {
+                label: 'مدرسه',
+                value: 'school'
+            },
+            {
+                label: 'دانشگاه',
+                value: 'university'
+            },
+            {
+                label: 'آموزشگاه',
+                value: 'institute'
+            },
+            {
+                label: 'شخصی',
+                value: 'personal'
+            }
+        ]
+
+        var placeSelector = new SelectPure('.placeSelector', {
+            options: placeOptions,
+            multiple: false,
+            autocomplete: true,
+            icon: "fa fa-times",
+            placeholder: 'انتخاب کنید',
+            value: 'school',
+            onChange: value => {
+                console.log(value);
+                switch (value) {
+                    case 'school': {
+                        
+                        document.querySelectorAll('.universityMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.instituteMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.personalMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.schoolMode').forEach(item => (item.style.display = 'block'));
+                        break;
+                    }
+                    case 'university': {
+                        document.querySelectorAll('.instituteMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.schoolMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.personalMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.universityMode').forEach(item => (item.style.display = 'block'));
+                        break;
+                    }
+                    case 'institute': {
+                        document.querySelectorAll('.universityMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.schoolMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.personalMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.instituteMode').forEach(item => (item.style.display = 'block'));
+                        break;
+                    }
+                    case 'personal': {
+                        document.querySelectorAll('.universityMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.instituteMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.schoolMode').forEach(item => (item.style.display = 'none'));
+                        document.querySelectorAll('.personalMode').forEach(item => (item.style.display = 'block'));
+                        break;
+                    }
+                }
+            },
+            classNames: {
+                select: "select-pure__select",
+                dropdownShown: "select-pure__select--opened",
+                multiselect: "select-pure__select--multiple",
+                label: "select-pure__label",
+                placeholder: "select-pure__placeholder",
+                dropdown: "select-pure__options",
+                option: "select-pure__option",
+                autocompleteInput: "select-pure__autocomplete",
+                selectedLabel: "select-pure__selected-label",
+                selectedOption: "select-pure__option--selected",
+                placeholderHidden: "select-pure__placeholder--hidden",
+                optionHidden: "select-pure__option--hidden",
+            }
+
+        });
+
+        console.log(document.querySelector('#form'));
+        document.querySelector('#form').addEventListener('submit', function (event) {
+            document.querySelector('#place').value = placeSelector.value();
+        });
+    })
+</script>

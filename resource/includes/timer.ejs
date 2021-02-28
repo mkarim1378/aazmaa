@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/css/timer.css">
+<div class="timerContainer">
+    <input type="hidden" id="currentTime" value="<%=currentTime.fullTime.en%>">
+    <input type="hidden" id="time1" value="<%=time1%>">
+    <input type="hidden" id="time2" value="<%=time2%>">
+    <div class="circle not-in-print">
+        <svg width="130" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(110,110)">
+                <circle r="100" class="e-c-base" />
+                <g transform="rotate(-90)">
+                    <circle r="100" class="e-c-progress" />
+                    <g id="e-pointer">
+                        <circle cx="100" cy="0" r="8" class="e-c-pointer" />
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </div>
+    <div class="controlls">
+        <div class="display-remain-time not-in-print" id="remain">00:00</div>
+    </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let started = '<%=started%>'
+    let ended = '<%=ended%>'
+</script>
+<script src="/js/timer.js"></script>

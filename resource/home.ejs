@@ -1,0 +1,95 @@
+<%-contentFor('body')%>
+
+<div class="container">
+    <%if(user.type == 'teacher' || user.isAdmin){%>
+
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-warning card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">content_paste</i>
+                        </div>
+                        <p class="card-category">تعداد کل آزمون های ثبت شده</p>
+                        <h3 class="card-title"><%=helper.enDigitsToFa(exams.length) || '۰'%></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <%futureExams.forEach(exam => {%>
+                                <i class="material-icons text-info">info</i>
+                                <a href="/panel/exam/edit/<%=exam._id%>">آزمون بیش رو : <%=helper.enDigitsToFa(exam.date1)%> ساعت :‌ <%=helper.enDigitsToFa(exam.time1)%></a>
+                            <%})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">question_answer</i>
+                        </div>
+                        <p class="card-category">سوالات ثبت شده</p>
+                        <h3 class="card-title"><%=helper.enDigitsToFa(questions.length)%></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">date_range</i>۲۴ ساعت اخیر
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">groups</i>
+                        </div>
+                        <!-- قابل رویت برای مدیر -->
+                        <p class="card-category">تعداد برگزار کنندگان</p>
+                        <h3 class="card-title">۱۳ نفر</h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">update</i> هم‌اکنون
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+    
+    <%}%>
+    
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8 col-sm-12">
+            <div class="card">
+                <div class="card-header card-header-warning" style="text-align: right;">
+                    <h3 class="card-title">اعلان ها</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info alert-with-icon" style="padding: 1em;">
+                        <i class="material-icons" data-notify="icon">info</i>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="material-icons">close</i>
+                        </button>
+                        <span style="text-align: right; padding-right: 5em;">رمز عبور شما به صورت پیشفرض کد ملی شماست</span>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+<script>
+    (() => {
+        localStorage.clear();
+        localStorage.setItem('mode', 'none');
+    })()
+</script>
+<script src="/js/cleanup.js"></script>

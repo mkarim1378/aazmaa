@@ -1,0 +1,106 @@
+<%-contentFor('body')%> 
+
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="row">
+        <div class="col-6">
+            <h3 class="text-right"><%=student.name%> <%=student.family%></h3>
+            <h4 class="text-right">کد ملی :‌ <%=helper.enDigitsToFa(student.nationalCode)%></h4>
+            <span><h4 class="text-right">آزمون :‌ <%=exam.title%></h4></span>
+            <span><h4 class="text-right">کد آزمون :‌ <%=exam.code%></h4></span>
+            <div class="row mt-3">
+                <div class="col-3">
+                    <h4 class="text-right">نمره کل :‌</h4>
+                </div>
+                
+            </div>
+            <div class="col-5">
+                <form action="/panel/student/answer/correction/changeGrade/<%=student._id%>/<%=exam._id%>" method="POST">
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="text" name="grade" value="<%=helper.enDigitsToFa(student_exam.grade)%>" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-success">تغییر نمره</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    <%questions.forEach(question => { %>
+        
+    <div class="card">
+        <div class="card-body">
+            
+            <div class="row">
+                <div class="col-12" style="text-align: right;">
+                    <%question.question.forEach(line => { %>
+                    <p><%=line%></p>
+                    <%})%>
+                    <h4><%=helper.enDigitsToFa(question.grade)%> نمره</h4>
+                    <%question.answers.forEach(answer => {%>
+                    <div class="media border p-3">
+
+                        <img src="/images/icons/person.png" alt="John Doe" class="mr-3 mt-3 rounded-circle"
+                            style="width:60px;">
+                        <div class="media-body" style="text-align: right;">
+                            <h4>پاسخ داده شده</h4>
+                            <p>
+                                <%if(answer.answer == 'true' || answer.answer == 'false'){%>
+                                    <%-answer.answer == true ? 'صحیح' : 'غلط'%>
+                                <%}else{%>
+                                    <%=helper.enDigitsToFa(answer.answer)%>
+                                <%}%>
+                            </p>
+                            <%if(answer.media){%>
+                                <span>فایل ضمیمه</span>
+                                <a class="btn btn-success btn-fab btn-round" href="/panel/student/answer/download/<%=answer._id%>">
+                                    <i class="material-icons" style="color: white; font-size: 20pt;">cloud_download</i>
+                                </a>
+                            <%}%>
+                            <hr>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <form action="/panel/student/answer/correction/<%=answer._id%>" method="POST">
+                                            <div class="radio">
+                                                <div class="radio">
+                                                    <label><input <%-answer.status != 'undefined' ? (answer.status == true && answer.status != null ? 'checked' : '') : ''%> type="radio" value="true" name="status">صحیح</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input <%-answer.status != 'undefined' ? (answer.status == false && answer.status != null ? 'checked' : '') : ''%> type="radio" value="false" name="status">غلط</label>
+                                                </div>
+                                                <%if(question.grade){%>
+                                                    <div class="col-3">
+                                                        <input type="text" name="grade" class="form-control" placeholder="نمره" value="<%=answer.grade ? helper.enDigitsToFa(answer.grade) : ''%>" required>
+                                                    </div>
+                                                <%}%>
+                                                <button type="submit" class="btn btn-success">تصحیح</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <%if(answer.corrected){%>
+                                        <div class="col-2">
+                                            <form action="/panel/student/answer/correction/delete/<%=answer._id%>" method="GET" style="position: absolute; bottom: 1em;">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="material-icons">delete</i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    <%}%>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%})%>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%})%>

@@ -1,0 +1,41 @@
+
+.timerContainer{
+  margin: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.display-remain-time {
+  font-family: 'Vazir';
+  font-weight: 100;
+  font-size: 30pt;
+  color: #f5655b;
+  
+}
+
+
+.e-c-base {
+  fill: none;
+  stroke: #B6B6B6;
+  stroke-width: 2px
+}
+
+.e-c-progress {
+  fill: none;
+  stroke: #f5655b;
+  stroke-width: 5px;
+  transition: stroke-dashoffset 0.7s;
+}
+
+.e-c-pointer {
+  fill: #FFF;
+  stroke: #F7958E;
+  stroke-width: 2px;
+}
+
+#e-pointer { transition: transform 0.7s; }
+
+

@@ -1,0 +1,113 @@
+<%-contentFor('body')%>
+<%-include('../includes/refresh.ejs', {position: {left: 1, bottom: 1}})%>
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header card-header-warning" style="text-align: right;">
+                    <p class="card-title">شرکت در آزمون حدید</p>
+                </div>
+                <div class="card-body">
+                    <form action="/panel/student/exam/join" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="code" class="form-control" placeholder="کد آزمون">
+                            <button type="submit" class="btn btn-success btn-round btn-block">پیوستن</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+
+        <div class="col-12" style="display: flex; flex-wrap: wrap;">
+            <%exams.forEach(({exam, started, ended}) => {%>
+            <div class="card" style="width: 18rem; height: 20rem; margin: 1em 1em">
+                <div class="card-body"
+                    style="text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="margin-top: 3em;">
+                        <h4><%=exam.title%></h4>
+
+                        <%if(ended){%>
+                        <h4 class="text-danger">آزمون پایان یافته است</h4>
+                        <%}else{%>
+                        <p>تاریخ شروع: <%=helper.convertEnglishDigitsToPersian(exam.date1)%> زمان شروع:
+                            <%=helper.convertEnglishDigitsToPersian(exam.time1)%></p>
+                        <p>تاریخ پایان: <%=helper.convertEnglishDigitsToPersian(exam.date2)%> زمان پایان:
+                            <%=helper.convertEnglishDigitsToPersian(exam.time2)%></p>
+                        <%if(started){%>
+                        <h4 class="text-success">در حال برگزاری</h4>
+                        <%}%>
+                        <%}%>
+                    </div>
+                    <div>
+                        <%if(started){%>
+                            <a href="/panel/student/exam/<%=exam._id%>" class="btn btn-info btn-round
+                                btn-block">
+                                    
+                                    <%if(ended){%>
+                                        مشاهده نتایح
+                                        <i class="material-icons">
+                                            view_list
+                                        </i>
+                                    <%}else{%>
+                                        ورود به آزمون
+                                    <%}%>
+                                </a>
+                        <%}%>
+                        <%if(!ended){%>
+                            <form id="left" class="left" action="/panel/student/exam/left/<%=exam._id%>" method="GET">
+                                <button class="leftClass btn btn-danger btn-round">
+                                    ترک آزمون
+                                    <i class="material-icons">
+                                        exit_to_app
+                                    </i>
+                                </button>
+                            </form>
+                        <%}else{%>
+                            <form id="left" class="delete" action="/panel/student/exam/left/<%=exam._id%>" method="GET">
+                                <button class="leftClass btn btn-danger btn-round">
+                                    حذف آزمون
+                                    <i class="material-icons">
+                                        delete
+                                    </i>
+                                </button>
+                            </form>
+                        <%}%>
+                    </div>
+
+                </div>
+
+            </div>
+            <%})%>
+        </div>
+
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+
+    document.querySelectorAll('.leftClass').forEach(element => {
+        element.addEventListener('click', event => {
+            event.preventDefault();
+            Swal.fire({
+                title: 'آیا قصد ترک آزمون را دارید؟',
+                showDenyButton: true,
+                confirmButtonText: `بله`,
+                denyButtonText: `خیر`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.parentElement.submit();
+                }
+            })
+        });
+    });
+</script>

@@ -1,0 +1,11 @@
+botToken: 1475208126:AAEl8YREFaS-4w2AsNscDdFUq7ZN2XbhOEo
+bootstrapDoc: https://demos.creative-tim.com/material-dashboard-dark/docs/2.0/getting-started/introduction.html
+searchEngine: AIzaSyADSJLzA0rx9vO92cAvFA9vjXo58C2dWdA
+
+modes: fieldName_action_mode
+modes: {
+    'exam_addQuestion_mode'
+}
+
+filter: fieldName_filter
+values: fieldName_valueName_value

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>ثبت نام</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="/images/profile.png">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/bootstrap/css/bootstrap.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/fonts/iconic/css/material-design-iconic-font.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/animate/animate.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/css-hamburgers/hamburgers.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/animsition/css/animsition.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/select2/select2.min.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/vendor/daterangepicker/daterangepicker.css">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/login/css/main.css">
+	<link rel="stylesheet" href="/css/vazir.css">
+	<link rel="stylesheet" href="/css/bootstrap-rtl.min.css">
+	<!--===============================================================================================-->
+	<style>
+		* {
+			font-family: Vazir !important;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100" style="width: 50em;">
+
+				<span class="login100-form-title p-b-48">
+					<img src="/images/profile.png" width="150">
+				</span>
+				<%-include('../includes/error.ejs', {errors})%>
+				<form class="login100-form validate-form" action="/auth/register" method="POST">
+					<div class="form-group">
+						<div class="row">
+							<div class="col-6">
+								<div class="wrap-input100 ">
+									<input id="name" class="input100 " type="text" name="name">
+									<span class="focus-input100 " data-placeholder="نام"
+										style="font-family: Vazir !important;"></span>
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="wrap-input100">
+									<input class="input100" id="family" type="text" name="family">
+									<span class="focus-input100" data-placeholder="نام خانوادگی"
+										style="font-family: Vazir !important;"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row" style="display: flex; align-items:baseline;">
+								<div class="col-3">به عنوان</div>
+								<div class="col-5">
+									<select name="type" class="form-control" id="selectBox">
+										<option value="teacher">معلم</option>
+										<option value="institute">موسسه آموزشی</option>
+										<option value="university">دانشگاه</option>
+										<option value="student" selected>دانش آموز</option>
+									</select>
+								</div>
+								<div class="col-4">میخواهم ثبت نام کنم</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6" id="phoneNumber">
+								<div class="wrap-input100">
+									<input class="input100" type="text" name="phoneNumber" id="phoneNumber_">
+									<span class="focus-input100" data-placeholder="شماره همراه"
+										style="font-family: Vazir !important;"></span>
+								</div>
+
+							</div>
+							<div class="col-6">
+								<div class="wrap-input100">
+									<input class="input100" type="text" name="nationalCode"  id="nationalCode">
+									<span class="focus-input100" data-placeholder="کد ملی"
+										style="font-family: Vazir !important;"></span>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="form-gorup">
+						<div class="row">
+							<div class="col-6" id="email">
+								<div class="wrap-input100" data-validate="Valid email is: a@b.c">
+									<input class="input100" type="text" name="email" id="EMAIL">
+									<span class="focus-input100" data-placeholder="ایمیل"
+										style="font-family: Vazir !important;"></span>
+								</div>
+							</div>
+							<!-- <div class="col-6" style="display: none;">
+								<div class="wrap-input100" data-validate="Enter password">
+									<input class="input100" type="password" name="password">
+									<span class="focus-input100" data-placeholder="رمز عبور"
+										style="font-family: Vazir !important;"></span>
+								</div>
+							</div> -->
+							<input type="hidden" name="password" value="" id="password">
+						</div>
+
+					</div>
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button type="submit" class="login100-form-btn">
+								ثبت نام
+							</button>
+
+						</div>
+					</div>
+
+				</form>
+				<div class="text-center p-t-115">
+
+					<span class="txt1">
+
+						قبلا ثبت نام کرده اید؟ <a class="text-success" href="/auth/login">وارد شوید</a>
+					</span>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<div id="dropDownSelect1"></div>
+
+	<!--===============================================================================================-->
+	<script src="/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/vendor/animsition/js/animsition.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/vendor/bootstrap/js/popper.js"></script>
+	<script src="/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/vendor/select2/select2.min.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/login/vendor/daterangepicker/daterangepicker.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/vendor/countdowntime/countdowntime.js"></script>
+	<!--===============================================================================================-->
+	<script src="/login/js/main.js"></script>
+	<script>
+		let tempUser = {};
+		if (localStorage.getItem('tempUser')) {
+			tempUser = JSON.parse(localStorage.getItem('tempUser'));
+			document.getElementById('EMAIL').value = tempUser.email || '';
+			if(tempUser.email){
+				document.getElementById('EMAIL').classList.add('has-val');
+			}
+			document.getElementById('phoneNumber_').value = tempUser.phoneNumber || '';
+			if(tempUser.phoneNumber){
+				document.getElementById('phoneNumber_').classList.add('has-val');
+			}
+			document.getElementById('nationalCode').value = tempUser.nationalCode || '';
+			if(tempUser.nationalCode){
+				document.getElementById('nationalCode').classList.add('has-val');
+			}
+			// document.getElementById('password').value = tempUser.password || '';
+			document.getElementById('name').value = tempUser.name || '';
+			if(tempUser.name){
+				document.getElementById('name').classList.add('has-val');
+			}
+			document.getElementById('family').value = tempUser.family || '';
+			if(tempUser.family){
+				document.getElementById('family').classList.add('has-val');
+			}
+			document.getElementById('selectBox').value = tempUser.type || 'student';
+			document.getElementById('password').value = tempUser.password || document.getElementById('nationalCode').value;
+			
+		}
+
+
+		document.getElementById('email').style.display = 'none';
+		document.getElementById('selectBox').addEventListener('change', event => {
+			if (event.target.value == 'student') {
+				document.getElementById('email').style.display = 'none';
+			} else {
+				document.getElementById('email').style.display = 'block';
+			}
+		});
+		document.querySelector('form').addEventListener('submit', event => {
+			tempUser.email = document.getElementById('EMAIL').value;
+			tempUser.phoneNumber = document.getElementById('phoneNumber_').value;
+			tempUser.nationalCode = document.getElementById('nationalCode').value;
+			tempUser.name = document.getElementById('name').value;
+			tempUser.family = document.getElementById('family').value;
+			tempUser.type = document.getElementById('selectBox').value;
+			tempUser.password = tempUser.nationalCode;
+			document.getElementById('password').value = tempUser.password;
+			localStorage.setItem('tempUser', JSON.stringify(tempUser));
+		});
+
+	</script>
+
+</body>
+
+</html>

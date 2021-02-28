@@ -1,0 +1,135 @@
+<%-contentFor('body')%>
+<%-include('../includes/error.ejs', {errors})%>
+<%-include('../includes/success.ejs', {success})%>
+<%-include('../includes/applyButton.ejs')%>
+<%-include('../includes/cancelButton.ejs')%>
+<link rel="stylesheet" href="/css/categoryCard.css">
+
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="addCategory">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="btn btn-danger">بستن</h4>
+                </button>
+                <h5 class="modal-title">افزودن دسته بندی</h5>
+
+            </div>
+            <div class="modal-body">
+                <form action="/panel/category/create" method="POST" id="notificationForm" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <input type="text" name="title" class="form-control" placeholder="عنوان دسته بندی">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3" style="text-align: right;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="#" id="deleteImage" style="display: none;"><img
+                                            src="/images/icons/x-button.png" width="30"
+                                            style="position: absolute; top:2em; left: 1em"></a>
+                                    <img src="/images/icons/imagePlaceholder.png" width="130" id="imagePlaceholder">
+                                    <input type="file" name="image" class="filestyle" id="image"
+                                        data-btnClass="btn-primary" data-input="false">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block btn-round">ایجاد</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <a href="#" style="margin: 3em" data-toggle="modal" data-target="#addCategory">
+            <i class="material-icons">note_add</i>
+            افزودن دسته بندی
+        </a>
+        <div class="col-12" style="display: flex; flex-wrap: wrap;">
+            <a href="/panel/category/withoutCategory">
+                <div class="card 1">
+                    <div class="card_image"> <img src="/images/icons/imagePlaceholder3.png" /> </div>
+                    <div class="card_title title-white">
+                        <p>همه</p>
+                    </div>
+                </div>
+            </a>
+            <input type="hidden" value="<%=selectedQuestions%>" id="selected_questions">
+            <input type="hidden" name="mode" id="mode" value="<%=mode%>">
+            <input type="hidden" name="exam" id="exam" value="<%=exam%>">
+            <%categories.forEach(category => {%>
+            <a href="/panel/category/questions/<%=category._id%>">
+                <div class="card 1">
+
+                    <div class="card_image"> <img src="<%=category.image%>" /> </div>
+                    <div class="card_title title-white">
+                        <p><%=category.title%></p>
+                    </div>
+                </div>
+            </a>
+            <%})%>
+            <a href="#" data-toggle="modal" data-target="#addCategory">
+                <div class="card 1">
+                    <div class="card_image"> <img src="/images/icons/add.png" /> </div>
+                    <div class="card_title title-white">
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    if ((!localStorage.getItem('canceled') || localStorage.getItem('canceled') != 'true' ) && localStorage.getItem('mode') != 'none') {
+
+        if (document.querySelector('#mode').value == 'exam_addQuestion_mode' || (localStorage.getItem('mode') && localStorage.getItem('mode') == 'exam_addQuestion_mode')) {
+            localStorage.setItem('mode', 'exam_addQuestion_mode');
+            if (document.querySelector('#exam').value != 'null') {
+                localStorage.setItem('examId', document.querySelector('#exam').value);
+            } else {
+                localStorage.setItem('examId', 'null');
+            }
+            if (!localStorage.getItem('selectedQuestions')) {
+                if (document.querySelector('#selected_questions').value) {
+                    let selectedQuestions = document.querySelector('#selected_questions').value.split(',');
+                    localStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+                } else {
+                    localStorage.setItem('selectedQuestions', JSON.stringify([]));
+                }
+            }
+
+        } else {
+            localStorage.setItem('mode', 'none');
+        }
+
+    }
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+    document.getElementById('image').addEventListener('change', event => {
+        let url = URL.createObjectURL(event.target.files[0]);
+        document.querySelector('#imagePlaceholder').src = url;
+        document.getElementById('deleteImage').style.display = 'inline-block';
+    });
+    document.getElementById('deleteImage').addEventListener('click', event => {
+        document.querySelector('#imagePlaceholder').src = '/images/icons/imagePlaceholder.png'
+        document.getElementById('image').value = '';
+        $(":file").filestyle('clear');
+        document.getElementById('deleteImage').style.display = 'none';
+
+    });
+</script>

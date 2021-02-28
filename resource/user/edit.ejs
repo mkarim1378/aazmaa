@@ -1,0 +1,141 @@
+<%-contentFor('body')%>
+<%-include('../includes/multiSelectStyle.ejs')%>
+
+<div class="container">
+    <%-include('../includes/error.ejs', {errors})%>
+    <%-include('../includes/success.ejs', {success})%>
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header card-header-primary" style="text-align: right;">
+                    <p class="card-title">ویرایش کاربر</p>
+                </div>
+                <div class="card-body">
+                    <form action="/panel/user/edit/<%=user._id%>" method="POST" style="text-align: right;" enctype="multipart/form-data" id="form">
+                        <div class="row" style="text-align: right;">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="name">نام</label>
+                                        <input type="text" name="name" value="<%=user.name%>" class="form-control">
+
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="family">نام خانوادگی</label>
+                                        <input type="text" name="family" value="<%=user.family%>" class="form-control">
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="phoneNumber">شماره تلفن</label>
+                                        <input type="text" name="phoneNumber" value="<%=user.phoneNumber%>"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="nationalCode">کد ملی</label>
+                                        <input type="text" name="nationalCode" value="<%=user.nationalCode%>"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="role">سطح دسترسی</label>
+                                            <input type="hidden" name="role" id="role">
+                                            <input type="hidden" value="<%=selectedRole%>" id="selectedRole">
+                                            <input type="hidden" value="<%=roles%>" id="roles">
+                                            <span class="roleSelector"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6  d-flex justify-content-center">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <a href="#" id="deleteImage" style="display: none;"><img src="/images/icons/x-button.png" width="30" style="position: absolute; top:2em; left: 1em"></a>
+                                        <%if(user.profile){%>
+                                            <img src="<%=user.profile%>" width="400" id="imagePlaceholder">
+                                        <%}else{%>
+                                            <img src="/images/icons/person.png" width="200" id="imagePlaceholder">
+                                        <%}%>
+                                        <input type="file" id="profile" name="profile" class="filestyle"
+                                            data-btnClass="btn-primary" data-input="false" accept=".jpg, .jpeg, .svg, .png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-round">ویرایش</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/bundle.min.js"></script>
+<script>
+    $(":file").filestyle({
+        text: '',
+        input: true,
+        htmlIcon: '<i class="material-icons" style="font-size: 20pt">attach_file</i>',
+        btnClass: "btn-primary btn-fab btn-round",
+        placeholder: 'انتخاب فایل'
+    });
+    $(document).ready(() => {
+        document.getElementById('profile').addEventListener('change', event => {
+            let url = URL.createObjectURL(event.target.files[0]);
+            document.querySelector('#imagePlaceholder').src = url;
+            document.querySelector('#imagePlaceholder').width = '400';
+            document.getElementById('deleteImage').style.display = 'inline-block';
+        })
+
+        document.getElementById('deleteImage').addEventListener('click', event => {
+            document.querySelector('#imagePlaceholder').src = '/images/icons/person.png'
+            document.querySelector('#imagePlaceholder').width = '200';
+            document.getElementById('profile').value = '';
+            $(":file").filestyle('clear');
+            document.getElementById('deleteImage').style.display = 'none';
+            
+        });
+    
+        let roles = JSON.parse(document.querySelector('#roles').value || '[]');
+        let selectedRoles = JSON.parse(document.querySelector('#selectedRole').value || '[]').map(role => role._id);
+        console.log(document.querySelector('#selectedRole').value);
+        let roleOptions = []
+        for (let role of roles) {
+            roleOptions.push({
+                label: role.name,
+                value: role._id
+            });
+        }
+
+        var permissionSelector = new SelectPure('.roleSelector', {
+            placeholder: 'انتخاب سطح دسترسی',
+            options: roleOptions,
+            multiple: true,
+            icon: "fa fa-times",
+            value: selectedRoles,
+            autocomplete: true,
+            classNames: {
+                select: "select-pure__select",
+                dropdownShown: "select-pure__select--opened",
+                multiselect: "select-pure__select--multiple",
+                label: "select-pure__label",
+                placeholder: "select-pure__placeholder",
+                dropdown: "select-pure__options",
+                option: "select-pure__option",
+                autocompleteInput: "select-pure__autocomplete",
+                selectedLabel: "select-pure__selected-label",
+                selectedOption: "select-pure__option--selected",
+                placeholderHidden: "select-pure__placeholder--hidden",
+                optionHidden: "select-pure__option--hidden",
+            }
+
+        })
+        document.getElementById('form').addEventListener('submit', event => {
+            document.getElementById('role').value = permissionSelector.value();
+        });
+    })
+</script>
