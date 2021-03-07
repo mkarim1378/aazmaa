@@ -1,6 +1,6 @@
 
 (async () => {
-    let socket = io('http://192.168.43.171:3000/timer');
+    let socket = io('http://192.168.43.171:4000/timer');
 
     convertPersianDigitsToEnglish = function (data) {
         let str = data;

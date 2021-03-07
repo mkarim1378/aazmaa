@@ -4,7 +4,7 @@ let date = document.querySelector('#date');
 try{
 
     socket.emit('getCurrentDate', {
-        message: 'I eant current date'
+        message: 'I want current date'
     });
     socket.emit('getCurrentTime', {
         message: 'I want current time'

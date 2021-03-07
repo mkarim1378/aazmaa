@@ -49,13 +49,10 @@ class AnswerController extends Controller {
             await exam.save();
             return this.back(req, res);
         }
-        if (req.file) {
-            media = `${req.file.destination}/${req.file.filename}`.substring(8);
-        }
+        
         
         for (let i = 1; i <= questions.length; i++) {
             if(!req.body[`answer-${i}`]){
-                
                 continue;
             }
             
@@ -68,7 +65,8 @@ class AnswerController extends Controller {
                 }
                 await answer.remove();
             }
-        
+            let media = '';
+            
             let newAnswer = new Answer({
                 question: req.body[`question-${i}`],
                 answer: req.body[`answer-${i}`],

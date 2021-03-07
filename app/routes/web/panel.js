@@ -1,4 +1,4 @@
-const io = require('socket.io')(8080);
+const io = require('socket.io')(3000);
 const progressStream = require('progress-stream');
 const express = require('express');
 const router = express.Router();

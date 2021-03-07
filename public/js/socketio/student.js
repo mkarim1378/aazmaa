@@ -1,4 +1,4 @@
-let studentSocket = io('http://localhost:4000/student');
+let studentSocket = io('http://localhost:3000/student');
 
 studentSocket.on('connection', () => {
     

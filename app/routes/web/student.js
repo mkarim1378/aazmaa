@@ -24,12 +24,7 @@ router.get('/exam/left/:examId', examController.leftExam);
 router.get('/exam/:examId', examController.examSinglePage);
 
 //===================================answer====================================
-router.post('/answer', answerUploads.single('file'),(req, res, next) => {
-    if(req.file){
-        req.body.file = req.file.filename;
-    }
-    next();
-}, answerController.answer);
+router.post('/answer', answerUploads.single('file'), answerController.answer);
 router.get('/answer/delete/:id', answerController.destroy);
 router.get('/answer/download/:answerId', answerController.download);
 router.post('/answer/correction/:answerId', answerController.correction);

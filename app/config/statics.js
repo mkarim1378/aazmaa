@@ -2,7 +2,7 @@ const path = require('path');
 module.exports = {
     botToken: '1475208126:AAEl8YREFaS-4w2AsNscDdFUq7ZN2XbhOEo',
     connectionString: 'mongodb://localhost/aazmaa',
-    port: 3000,
+    port: 4000,
     
     views: {
         viewsPath: path.resolve('./resource'),
