@@ -50,28 +50,28 @@ passport.use('local-register', new LocalStrategy({
             type: req.body.type,
             profile
         });
-        switch (req.body.type) {
-            case 'student': {
-                let studentRole = await Role.findOne({ name: 'student' });
-                user.role.push(studentRole._id);
-                break;
-            }
-            case 'teacher': {
-                let teacherRole = await Role.findOne({ name: 'teacher' });
-                user.role.push(teacherRole._id);
-                break;
-            }
-            case 'institute': {
-                let instituteRole = await Role.findOne({ name: 'institute' });
-                user.role.push(instituteRole._id);
-                break;
-            }
-            case 'university': {
-                let universityRole = await Role.findOne({ name: 'university' });
-                user.role.push(universityRole._id);
-                break;
-            }
-        }
+        // switch (req.body.type) {
+        //     case 'student': {
+        //         let studentRole = await Role.findOne({ name: 'student' });
+        //         user.role.push(studentRole._id);
+        //         break;
+        //     }
+        //     case 'teacher': {
+        //         let teacherRole = await Role.findOne({ name: 'teacher' });
+        //         user.role.push(teacherRole._id);
+        //         break;
+        //     }
+        //     case 'institute': {
+        //         let instituteRole = await Role.findOne({ name: 'institute' });
+        //         user.role.push(instituteRole._id);
+        //         break;
+        //     }
+        //     case 'university': {
+        //         let universityRole = await Role.findOne({ name: 'university' });
+        //         user.role.push(universityRole._id);
+        //         break;
+        //     }
+        // }
         await user.save();
         
         return done(null, user);
