@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  aazmaa-server:
+    image: node:16
+    container_name: aazmaa-server
+    working_dir: "/app"
+    volumes:
+      - ./:/app
+    entrypoint: npm run production
+    ports:
+      - 80:4000
+    depends_on:
+      - aazmaa-mongo
+
+  aazmaa-mongo:
+    image: mongo:4.4.6
+    container_name: aazmaa-mongo
+    volumes:
+      - ./data:/data/db
+      - ./dump:/dump
+    ports:
+      - 27017:27017
+    # command: mongorestore -d aazmaa /dump/aazmaa
+
+volumes:
+  aazmaa-db:
