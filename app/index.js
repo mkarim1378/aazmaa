@@ -44,11 +44,11 @@ module.exports = class Applicattion {
     configDataBase() {
         mongoose.Promise = global.Promise;
         mongoose.connect(config.statics.connectionString, {
-            auth: {
-                authSource: "admin"
-            },
-            user: 'admin',
-            pass: 'CzL6Xu724KbX565tMf5hWQ78',
+            // auth: {
+            //     authSource: "admin"
+            // },
+            // user: 'admin',
+            // pass: 'CzL6Xu724KbX565tMf5hWQ78',
             useUnifiedTopology: true,
             useNewUrlParser: true
         })
